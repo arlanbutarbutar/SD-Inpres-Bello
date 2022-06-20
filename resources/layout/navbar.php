@@ -1,25 +1,31 @@
-<!-- Topbar -->
-<nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
-  <!-- Sidebar Toggle (Topbar) -->
-  <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
-    <i class="fa fa-bars"></i>
-  </button>
-  <!-- Topbar Navbar -->
-  <ul class="navbar-nav ml-auto">
-    <!-- Nav Item - User Information -->
-    <li class="nav-item dropdown no-arrow">
-      <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        <span class="mr-2 d-none d-lg-inline text-gray-600 small"><?= $_SESSION['nama-guru']?></span>
-        <img class="img-profile rounded-circle" src="assets/img/undraw_profile.svg">
-      </a>
-      <!-- Dropdown - User Information -->
-      <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
-        <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
-          <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-          Keluar
-        </a>
+<div class="app-header-inner">
+  <div class="container-fluid py-2">
+    <div class="app-header-content">
+      <div class="row justify-content-between align-items-center">
+
+        <div class="col-auto">
+          <a id="sidepanel-toggler" class="sidepanel-toggler d-inline-block d-xl-none" href="#">
+            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 30 30" role="img">
+              <title>Menu</title>
+              <path stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" d="M4 7h22M4 15h22M4 23h22"></path>
+            </svg>
+          </a>
+        </div>
+
+        <div class="app-utilities col-auto">
+          <div class="app-utility-item app-user-dropdown dropdown">
+            <a class="dropdown-toggle" id="user-dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false"><img src="assets/img/users/default.png" alt="user profile"></a>
+            <ul class="dropdown-menu" aria-labelledby="user-dropdown-toggle">
+              <li><a class="dropdown-item" href="auth/logout">Log Out</a></li>
+            </ul>
+          </div>
+          <!--//app-user-dropdown-->
+        </div>
+        <!--//app-utilities-->
       </div>
-    </li>
-  </ul>
-</nav>
-<!-- End of Topbar -->
+      <!--//row-->
+    </div>
+    <!--//app-header-content-->
+  </div>
+  <!--//container-fluid-->
+</div>

@@ -4,20 +4,19 @@
     $password=htmlspecialchars(addslashes(trim(mysqli_real_escape_string($conn, $data['password']))));
     $guru=mysqli_query($conn, "SELECT * FROM guru WHERE nip='$nip'");
     if(mysqli_num_rows($guru)==0){
-      $_SESSION['message-danger']="Maaf, NIP yang anda masukan sudah terdaftar.";
-      $_SESSION['time-message']=time();
-      return false;
-    }else if(mysqli_num_rows($guru)>0){
-      $row=mysqli_fetch_assoc($guru);
-      if($row['hak_akses']>1){
-        $_SESSION['message-danger']="Maaf, NIP anda belum diaktifkan, silahkan hubungi admin untuk mengaktifkan!";
+      $siswa=mysqli_query($conn, "SELECT * FROM siswa WHERE nis='$nip'");
+      if(mysqli_num_rows($siswa)==0){
+        $_SESSION['message-danger']="Maaf, akun anda belum terdaftar.";
         $_SESSION['time-message']=time();
         return false;
-      }else if($row['hak_akses']==1){
+      }else if(mysqli_num_rows($siswa)>0){
+        $row=mysqli_fetch_assoc($siswa);
         if(password_verify($password, $row['password'])){
-          $_SESSION['id-guru']=$row['id_guru'];
-          $_SESSION['nip']=$row['nip'];
-          $_SESSION['nama-guru']=$row['nama_guru'];
+          $_SESSION['id-guru']=$row['id_siswa'];
+          $_SESSION['id-kelas']=$row['id_kelas'];
+          $_SESSION['nip']=$row['nis'];
+          $_SESSION['nama-guru']=$row['nama_siswa'];
+          $_SESSION['akses']=3;
           if(isset($_SESSION['auth'])){unset($_SESSION['auth']);}
           return mysqli_affected_rows($conn);
         }else{
@@ -25,6 +24,20 @@
           $_SESSION['time-message']=time();
           return false;
         }
+      }
+    }else if(mysqli_num_rows($guru)>0){
+      $row=mysqli_fetch_assoc($guru);
+      if(password_verify($password, $row['password'])){
+        $_SESSION['id-guru']=$row['id_guru'];
+        $_SESSION['nip']=$row['nip'];
+        $_SESSION['nama-guru']=$row['nama_guru'];
+        $_SESSION['akses']=$row['hak_akses'];
+        if(isset($_SESSION['auth'])){unset($_SESSION['auth']);}
+        return mysqli_affected_rows($conn);
+      }else{
+        $_SESSION['message-danger']="Maaf, kata sandi yang Anda masukkan tidak cocok.";
+        $_SESSION['time-message']=time();
+        return false;
       }
     }
   }
@@ -83,14 +96,16 @@
       return false;
     }
     $nama_siswa=htmlspecialchars(addslashes(trim(mysqli_real_escape_string($conn, $data['nama-siswa']))));
+    $id_kelas=htmlspecialchars(addslashes(trim(mysqli_real_escape_string($conn, $data['id-kelas']))));
     $jk=htmlspecialchars(addslashes(trim(mysqli_real_escape_string($conn, $data['jk']))));
     $tempat_lahir=htmlspecialchars(addslashes(trim(mysqli_real_escape_string($conn, $data['tempat-lahir']))));
     $tgl_lahir=htmlspecialchars(addslashes(trim(mysqli_real_escape_string($conn, $data['tgl-lahir']))));
     $tgl_lahir=date_create($tgl_lahir);
     $tgl_lahir=date_format($tgl_lahir, "d M Y");
     $ttl=$tempat_lahir.", ".$tgl_lahir;
+    $password=password_hash($nis, PASSWORD_DEFAULT);
     $nama_ortu=htmlspecialchars(addslashes(trim(mysqli_real_escape_string($conn, $data['nama-ortu']))));
-    mysqli_query($conn, "INSERT INTO siswa(nis,nama_siswa,jenis_kelamin,ttl,nama_ortu) VALUES('$nis','$nama_siswa','$jk','$ttl','$nama_ortu')");
+    mysqli_query($conn, "INSERT INTO siswa(id_kelas,nis,password,nama_siswa,jenis_kelamin,ttl,nama_ortu) VALUES('$id_kelas','$nis','$password','$nama_siswa','$jk','$ttl','$nama_ortu')");
     return mysqli_affected_rows($conn);
   }
   function ubahSiswa($data){global $conn;
@@ -117,7 +132,8 @@
         $_SESSION['time-message']=time();
         return false;
       }
-      mysqli_query($conn, "UPDATE siswa SET nis='$nis', nama_siswa='$nama_siswa', jenis_kelamin='$jk', ttl='$ttl', nama_ortu='$nama_ortu' WHERE id_siswa='$id_siswa'");
+      $password=password_hash($nis, PASSWORD_DEFAULT);
+      mysqli_query($conn, "UPDATE siswa SET nis='$nis', password='$password', nama_siswa='$nama_siswa', jenis_kelamin='$jk', ttl='$ttl', nama_ortu='$nama_ortu' WHERE id_siswa='$id_siswa'");
     }else{
       mysqli_query($conn, "UPDATE siswa SET nama_siswa='$nama_siswa', jenis_kelamin='$jk', ttl='$ttl', nama_ortu='$nama_ortu' WHERE id_siswa='$id_siswa'");
     }
@@ -181,52 +197,46 @@
     return mysqli_affected_rows($conn);
   }
   function tambahjadwal($data){global $conn;
-    $id_siswa=htmlspecialchars(addslashes(trim(mysqli_real_escape_string($conn, $data['id-siswa']))));
     $id_kelas=htmlspecialchars(addslashes(trim(mysqli_real_escape_string($conn, $data['id-kelas']))));
     $id_mapel=htmlspecialchars(addslashes(trim(mysqli_real_escape_string($conn, $data['id-mapel']))));
     $jam=htmlspecialchars(addslashes(trim(mysqli_real_escape_string($conn, $data['jam']))));
     $hari=htmlspecialchars(addslashes(trim(mysqli_real_escape_string($conn, $data['hari']))));
-    mysqli_query($conn, "INSERT INTO jadwal_pelajaran_siswa(id_siswa,id_kelas,id_mapel,jam,hari) VALUES('$id_siswa','$id_kelas','$id_mapel','$jam','$hari')");
+    mysqli_query($conn, "INSERT INTO jadwal(id_kelas,id_mapel,jam,hari) VALUES('$id_kelas','$id_mapel','$jam','$hari')");
     return mysqli_affected_rows($conn);
   }
   function ubahjadwal($data){global $conn;
     $id_jadwal=htmlspecialchars(addslashes(trim(mysqli_real_escape_string($conn, $data['id-jadwal']))));
-    $id_siswa=htmlspecialchars(addslashes(trim(mysqli_real_escape_string($conn, $data['id-siswa']))));
     $id_kelas=htmlspecialchars(addslashes(trim(mysqli_real_escape_string($conn, $data['id-kelas']))));
     $id_mapel=htmlspecialchars(addslashes(trim(mysqli_real_escape_string($conn, $data['id-mapel']))));
     $jam=htmlspecialchars(addslashes(trim(mysqli_real_escape_string($conn, $data['jam']))));
     $hari=htmlspecialchars(addslashes(trim(mysqli_real_escape_string($conn, $data['hari']))));
-    mysqli_query($conn, "UPDATE jadwal_pelajaran_siswa SET id_siswa='$id_siswa', id_kelas='$id_kelas', id_mapel='$id_mapel', jam='$jam', hari='$hari' WHERE id_jad='$id_jadwal'");
+    mysqli_query($conn, "UPDATE jadwal SET id_kelas='$id_kelas', id_mapel='$id_mapel', jam='$jam', hari='$hari' WHERE id_jadwal='$id_jadwal'");
     return mysqli_affected_rows($conn);
   }
   function hapusjadwal($data){global $conn;
     $id_jadwal=htmlspecialchars(addslashes(trim(mysqli_real_escape_string($conn, $data['id-jadwal']))));
-    mysqli_query($conn, "DELETE FROM jadwal_pelajaran_siswa WHERE id_jad='$id_jadwal'");
+    mysqli_query($conn, "DELETE FROM jadwal WHERE id_jadwal='$id_jadwal'");
     return mysqli_affected_rows($conn);
   }
   function tambahnilai($data){global $conn;
-    $id_kelas=htmlspecialchars(addslashes(trim(mysqli_real_escape_string($conn, $data['id-kelas']))));
     $id_siswa=htmlspecialchars(addslashes(trim(mysqli_real_escape_string($conn, $data['id-siswa']))));
     $id_mapel=htmlspecialchars(addslashes(trim(mysqli_real_escape_string($conn, $data['id-mapel']))));
-    $id_guru=htmlspecialchars(addslashes(trim(mysqli_real_escape_string($conn, $data['id-guru']))));
     $nilai_tugas=htmlspecialchars(addslashes(trim(mysqli_real_escape_string($conn, $data['tugas']))));
     $nilai_ulangan=htmlspecialchars(addslashes(trim(mysqli_real_escape_string($conn, $data['ulangan']))));
     $nilai_uts=htmlspecialchars(addslashes(trim(mysqli_real_escape_string($conn, $data['uts']))));
     $nilai_uas=htmlspecialchars(addslashes(trim(mysqli_real_escape_string($conn, $data['uas']))));
-    mysqli_query($conn, "INSERT INTO nilai(id_kelas,id_siswa,id_mapel,id_guru,nilai_tugas,nilai_ulangan,nilai_uts,nilai_uas) VALUES('$id_kelas','$id_siswa','$id_mapel','$id_guru','$nilai_tugas','$nilai_ulangan','$nilai_uts','$nilai_uas')");
+    mysqli_query($conn, "INSERT INTO nilai(id_siswa,id_mapel,nilai_tugas,nilai_ulangan,nilai_uts,nilai_uas) VALUES('$id_siswa','$id_mapel','$nilai_tugas','$nilai_ulangan','$nilai_uts','$nilai_uas')");
     return mysqli_affected_rows($conn);
   }
   function ubahnilai($data){global $conn;
     $id_nilai=htmlspecialchars(addslashes(trim(mysqli_real_escape_string($conn, $data['id-nilai']))));
-    $id_kelas=htmlspecialchars(addslashes(trim(mysqli_real_escape_string($conn, $data['id-kelas']))));
     $id_siswa=htmlspecialchars(addslashes(trim(mysqli_real_escape_string($conn, $data['id-siswa']))));
     $id_mapel=htmlspecialchars(addslashes(trim(mysqli_real_escape_string($conn, $data['id-mapel']))));
-    $id_guru=htmlspecialchars(addslashes(trim(mysqli_real_escape_string($conn, $data['id-guru']))));
     $nilai_tugas=htmlspecialchars(addslashes(trim(mysqli_real_escape_string($conn, $data['tugas']))));
     $nilai_ulangan=htmlspecialchars(addslashes(trim(mysqli_real_escape_string($conn, $data['ulangan']))));
     $nilai_uts=htmlspecialchars(addslashes(trim(mysqli_real_escape_string($conn, $data['uts']))));
     $nilai_uas=htmlspecialchars(addslashes(trim(mysqli_real_escape_string($conn, $data['uas']))));
-    mysqli_query($conn, "UPDATE nilai SET id_kelas='$id_kelas', id_siswa='$id_siswa', id_mapel='$id_mapel', id_guru='$id_guru', nilai_tugas='$nilai_tugas', nilai_ulangan='$nilai_ulangan', nilai_uts='$nilai_uts', nilai_uas='$nilai_uas' WHERE id_nilai='$id_nilai'");
+    mysqli_query($conn, "UPDATE nilai SET id_siswa='$id_siswa', id_mapel='$id_mapel', nilai_tugas='$nilai_tugas', nilai_ulangan='$nilai_ulangan', nilai_uts='$nilai_uts', nilai_uas='$nilai_uas' WHERE id_nilai='$id_nilai'");
     return mysqli_affected_rows($conn);
   }
   function hapusnilai($data){global $conn;
