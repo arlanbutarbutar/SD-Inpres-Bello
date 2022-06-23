@@ -59,10 +59,16 @@ $_SESSION['page-to'] = "tambah-jadwal";
                   </select>
                 </div>
                 <div class="form-group">
-                  <label for="jam">Jam</label>
-                  <input type="time" name="jam" id="jam" value="<?php if (isset($_POST['jam'])) {
-                                                                  echo $_POST['jam'];
-                                                                } ?>" class="form-control" placeholder="Jam" required>
+                  <label for="jam_mulai">Jam Mulai</label>
+                  <input type="time" name="jam_mulai" id="jam_mulai" value="<?php if (isset($_POST['jam_mulai'])) {
+                                                                              echo $_POST['jam_mulai'];
+                                                                            } ?>" class="form-control" placeholder="Jam Mulai" required>
+                </div>
+                <div class="form-group">
+                  <label for="jam_akhir">Jam Akhir</label>
+                  <input type="time" name="jam_akhir" id="jam_akhir" value="<?php if (isset($_POST['jam_akhir'])) {
+                                                                              echo $_POST['jam_akhir'];
+                                                                            } ?>" class="form-control" placeholder="Jam Akhir" required>
                 </div>
                 <div class="form-group">
                   <label for="hari">Hari</label>

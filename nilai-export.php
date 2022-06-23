@@ -3,8 +3,8 @@ require_once("controller/script.php");
 require_once __DIR__ . '/vendor/autoload.php';
 
 $mpdf = new \Mpdf\Mpdf();
-$mpdf->WriteHTML('<h1>SD Inpres Bello</h1>');
-$mpdf->WriteHTML('<h3>Nilai ('.$_SESSION["nip"].')'.$_SESSION["nama-guru"].'</h3>');
+$mpdf->WriteHTML('<img src="assets/img/cop.png" style="width: 100%;" alt="">');
+$mpdf->WriteHTML('<h3 style="text-align: center;">Daftar Nilai</h3>');
 $mpdf->WriteHTML('<table class="table table-striped" style="text-align: center;width: 100%;">
   <thead>
     <tr>
@@ -15,6 +15,8 @@ $mpdf->WriteHTML('<table class="table table-striped" style="text-align: center;w
     <th scope="col">Nilai Ulangan</th>
     <th scope="col">Nilai UTS</th>
     <th scope="col">Nilai UAS</th>
+    <th scope="col">Nilai Akhir</th>
+    <th scope="col">Ket</th>
     </tr>
   </thead>
   <tbody>
@@ -35,6 +37,8 @@ if (mysqli_num_rows($nilai) == 0) {
     <td>'. $row["nilai_ulangan"] .'</td>
     <td>'. $row["nilai_uts"] .'</td>
     <td>'. $row["nilai_uas"] .'</td>
+    <td>'. $row['nilai_akhir'] .'</td>
+    <td>'. $row['ket_nilai'] .'</td>
   </tr>
 ');
     $no++;

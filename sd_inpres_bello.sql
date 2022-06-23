@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 20 Jun 2022 pada 03.46
+-- Waktu pembuatan: 23 Jun 2022 pada 00.53
 -- Versi server: 10.4.22-MariaDB
 -- Versi PHP: 7.4.27
 
@@ -24,6 +24,22 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
+-- Struktur dari tabel `absensi`
+--
+
+CREATE TABLE `absensi` (
+  `id_absen` int(11) NOT NULL,
+  `id_guru` int(15) NOT NULL,
+  `id_siswa` int(15) NOT NULL,
+  `id_mapel` int(15) NOT NULL,
+  `tanggal` varchar(35) NOT NULL,
+  `status` char(25) NOT NULL,
+  `id_kelas` int(15) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
 -- Struktur dari tabel `guru`
 --
 
@@ -34,17 +50,22 @@ CREATE TABLE `guru` (
   `jenis_kelamin` varchar(25) NOT NULL,
   `no_tlp` varchar(12) NOT NULL,
   `password` varchar(75) NOT NULL,
-  `hak_akses` int(11) NOT NULL DEFAULT 2
+  `hak_akses` int(11) NOT NULL DEFAULT 2,
+  `jabatan` varchar(75) NOT NULL,
+  `nik` varchar(50) NOT NULL,
+  `status` varchar(50) NOT NULL,
+  `nuptk` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data untuk tabel `guru`
 --
 
-INSERT INTO `guru` (`id_guru`, `nip`, `nama_guru`, `jenis_kelamin`, `no_tlp`, `password`, `hak_akses`) VALUES
-(1, '12345678', 'admin', '-', '-', '$2y$10$//KMATh3ibPoI3nHFp7x/u7vnAbo2WyUgmI4x0CVVrH8ajFhMvbjG', 1),
-(5, '12345', 'Guru 1', 'Laki-Laki', '081111111111', '$2y$10$nx/NXeR8Oc9SJWh9vMvkceqAS2KIwzlkKuK1T0G5vv99b4HBThfRS', 2),
-(6, '12346', 'Guru 2', 'Laki-Laki', '081111111111', '$2y$10$cJdjoPbZZu5bRY85RpnmY.bnEM.UpYd4PRISPirIMDo3JLui/xV.i', 2);
+INSERT INTO `guru` (`id_guru`, `nip`, `nama_guru`, `jenis_kelamin`, `no_tlp`, `password`, `hak_akses`, `jabatan`, `nik`, `status`, `nuptk`) VALUES
+(1, '0', 'admin', '-', '-', '$2y$10$//KMATh3ibPoI3nHFp7x/u7vnAbo2WyUgmI4x0CVVrH8ajFhMvbjG', 1, 'Admin', '12345678', 'Admin', '0'),
+(11, '199311282019032013', 'Noviana Katarina Paula Gulo', 'Perempuan', '082113553456', '$2y$10$iNNaXr/Or9trsHwWTtIjUeqksn48g5ocmehbqNR.Zl8em/EFXfjSq', 2, 'Guru Mapel', '5371026811930004', 'PNS', '4460771672130063'),
+(12, '0', 'Semi Yun Herlin Ledoh', 'Perempuan', '081235636336', '$2y$10$Hwd6nyQf026.9gTJkK8DO.HxBoZgr4Ee4T4hjdQpmOhDYLo7zIKCG', 2, 'Guru Mapel', '5371026209850003', 'Guru Honor', '7254763665130123'),
+(13, '0', 'Jekson', 'Laki-Laki', '085246262864', '$2y$10$359RKHVRUdRvalhuD4au9e8nIl3e4FHJ..ZZ6oRJgRdaryW.RPFTS', 2, 'Guru Mapel', '537103230', 'Guru Honor', '575576766');
 
 -- --------------------------------------------------------
 
@@ -59,15 +80,6 @@ CREATE TABLE `jadwal` (
   `jam` time NOT NULL DEFAULT current_timestamp(),
   `hari` varchar(10) NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data untuk tabel `jadwal`
---
-
-INSERT INTO `jadwal` (`id_jadwal`, `id_kelas`, `id_mapel`, `jam`, `hari`) VALUES
-(4, 3, 2, '07:30:00', 'Senin'),
-(5, 3, 4, '10:20:00', 'Rabu'),
-(6, 4, 4, '09:30:00', 'Selasa');
 
 -- --------------------------------------------------------
 
@@ -88,26 +100,9 @@ CREATE TABLE `kelas` (
 --
 
 INSERT INTO `kelas` (`id_kelas`, `nama_kelas`, `id_guru`, `semester`, `tahunajar`) VALUES
-(3, 'IPA 1', 5, 1, 2022),
-(4, 'IPA 2', 6, 1, 2022);
-
--- --------------------------------------------------------
-
---
--- Struktur dari tabel `keterangan_kehadiran_siswa`
---
-
-CREATE TABLE `keterangan_kehadiran_siswa` (
-  `id_ket` int(11) NOT NULL,
-  `id_siswa` int(11) NOT NULL,
-  `sakit` varchar(25) NOT NULL,
-  `izin` varchar(25) NOT NULL,
-  `tanpa_keterangan` varchar(25) NOT NULL,
-  `kelakuan` varchar(100) NOT NULL,
-  `kerajinan` varchar(100) NOT NULL,
-  `kerapian` varchar(100) NOT NULL,
-  `catatan` text NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+(5, '1 A', 11, 1, 2022),
+(6, '1 B', 12, 1, 2022),
+(7, '3 A', 13, 1, 2022);
 
 -- --------------------------------------------------------
 
@@ -125,9 +120,14 @@ CREATE TABLE `mapel` (
 --
 
 INSERT INTO `mapel` (`id_mapel`, `nama_mapel`) VALUES
-(2, 'Biologi'),
-(4, 'Fisika'),
-(6, 'Kimia');
+(7, 'IPA'),
+(8, 'IPS'),
+(9, 'Penjaskes'),
+(10, 'Mulok'),
+(11, 'Matematika'),
+(12, 'TIK'),
+(13, 'Bahasa Indonesia'),
+(15, 'Bahasa Inggris');
 
 -- --------------------------------------------------------
 
@@ -142,18 +142,18 @@ CREATE TABLE `nilai` (
   `nilai_tugas` int(11) NOT NULL,
   `nilai_ulangan` int(11) NOT NULL,
   `nilai_uts` int(11) NOT NULL,
-  `nilai_uas` int(11) NOT NULL
+  `nilai_uas` int(11) NOT NULL,
+  `nilai_akhir` int(11) NOT NULL,
+  `ket_nilai` varchar(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data untuk tabel `nilai`
 --
 
-INSERT INTO `nilai` (`id_nilai`, `id_siswa`, `id_mapel`, `nilai_tugas`, `nilai_ulangan`, `nilai_uts`, `nilai_uas`) VALUES
-(5, 4, 4, 76, 80, 66, 95),
-(6, 6, 2, 77, 78, 65, 85),
-(7, 9, 2, 80, 85, 79, 88),
-(8, 10, 2, 67, 86, 89, 92);
+INSERT INTO `nilai` (`id_nilai`, `id_siswa`, `id_mapel`, `nilai_tugas`, `nilai_ulangan`, `nilai_uts`, `nilai_uas`, `nilai_akhir`, `ket_nilai`) VALUES
+(9, 11, 7, 70, 80, 95, 85, 83, 'B'),
+(10, 12, 7, 50, 65, 60, 45, 55, 'C');
 
 -- --------------------------------------------------------
 
@@ -165,26 +165,35 @@ CREATE TABLE `siswa` (
   `id_siswa` int(11) NOT NULL,
   `id_kelas` int(11) NOT NULL,
   `nama_siswa` varchar(100) NOT NULL,
-  `nis` varchar(25) NOT NULL,
+  `nisn` varchar(25) NOT NULL,
   `password` varchar(75) NOT NULL,
   `jenis_kelamin` varchar(35) NOT NULL,
   `ttl` varchar(50) NOT NULL,
-  `nama_ortu` varchar(100) NOT NULL
+  `nama_ibu` varchar(100) NOT NULL,
+  `nik` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data untuk tabel `siswa`
 --
 
-INSERT INTO `siswa` (`id_siswa`, `id_kelas`, `nama_siswa`, `nis`, `password`, `jenis_kelamin`, `ttl`, `nama_ortu`) VALUES
-(4, 3, 'Hans', '12345', '$2y$10$R3.mCcgGY57SiailrqVi8uFu4Sc9.jzsmJT7o8NNMheXEXN7DP0by', 'Laki-Laki', 'Kupang, 19 Jun 2022', 'Bambang'),
-(6, 4, 'Eman', '21414', '$2y$10$jV1cFX3T4Aa3msQkeX6WpujAYGFzWR/M1GPxu4w/zHyfUG/4n5Oc.', 'Laki-Laki', 'Kupang, 19 Jun 2022', 'hen'),
-(9, 3, 'Teo', '1313513', '$2y$10$ayK2G.RyRXd2fnS77PA0EOtq5uqHsy9cFSnJKeJgSV5vLO33upgv6', 'Laki-Laki', 'Soe, 19 Jun 2022', 'erigor'),
-(10, 4, 'Ester', '5363524', '$2y$10$Ek3Mapw9F7.WO/ZToMSJ1u8WDDaOxITW7MxlgZa1l4xFRJe4h/4EW', 'Perempuan', 'Kefa, 19 Jun 2022', 'Rendi');
+INSERT INTO `siswa` (`id_siswa`, `id_kelas`, `nama_siswa`, `nisn`, `password`, `jenis_kelamin`, `ttl`, `nama_ibu`, `nik`) VALUES
+(11, 5, 'ABRAHAM LATU SEDU', '3159108937', '$2y$10$4ii3Kw2H/hfcQl0FFv9aPePNxXybKjK6jc2A3ApkuMAFWXL4aOGY2', 'Laki-Laki', 'Kupang, 23 Jun 2022', 'VULDENSIA LAMATOK AN', '5371020301150002'),
+(12, 6, 'Agnesia Micharuny Zacharia', '3143294136', '$2y$10$VfBJApxAEzemY7EPoaJzeuSaP59TsKxrxbbYu4iUE5glKScY79N4m', 'Perempuan', 'sabu, 23 Jun 2022', 'Sance Taopan', '5301115708140001');
 
 --
 -- Indexes for dumped tables
 --
+
+--
+-- Indeks untuk tabel `absensi`
+--
+ALTER TABLE `absensi`
+  ADD PRIMARY KEY (`id_absen`),
+  ADD KEY `id_guru` (`id_guru`),
+  ADD KEY `id_kelas` (`id_kelas`),
+  ADD KEY `id_mapel` (`id_mapel`),
+  ADD KEY `id_siswa` (`id_siswa`);
 
 --
 -- Indeks untuk tabel `guru`
@@ -204,12 +213,6 @@ ALTER TABLE `jadwal`
 ALTER TABLE `kelas`
   ADD PRIMARY KEY (`id_kelas`),
   ADD KEY `id_guru` (`id_guru`);
-
---
--- Indeks untuk tabel `keterangan_kehadiran_siswa`
---
-ALTER TABLE `keterangan_kehadiran_siswa`
-  ADD PRIMARY KEY (`id_ket`);
 
 --
 -- Indeks untuk tabel `mapel`
@@ -237,69 +240,46 @@ ALTER TABLE `siswa`
 --
 
 --
+-- AUTO_INCREMENT untuk tabel `absensi`
+--
+ALTER TABLE `absensi`
+  MODIFY `id_absen` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=49;
+
+--
 -- AUTO_INCREMENT untuk tabel `guru`
 --
 ALTER TABLE `guru`
-  MODIFY `id_guru` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id_guru` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT untuk tabel `jadwal`
 --
 ALTER TABLE `jadwal`
-  MODIFY `id_jadwal` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id_jadwal` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- AUTO_INCREMENT untuk tabel `kelas`
 --
 ALTER TABLE `kelas`
-  MODIFY `id_kelas` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
-
---
--- AUTO_INCREMENT untuk tabel `keterangan_kehadiran_siswa`
---
-ALTER TABLE `keterangan_kehadiran_siswa`
-  MODIFY `id_ket` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_kelas` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT untuk tabel `mapel`
 --
 ALTER TABLE `mapel`
-  MODIFY `id_mapel` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id_mapel` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT untuk tabel `nilai`
 --
 ALTER TABLE `nilai`
-  MODIFY `id_nilai` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id_nilai` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT untuk tabel `siswa`
 --
 ALTER TABLE `siswa`
-  MODIFY `id_siswa` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
-
---
--- Ketidakleluasaan untuk tabel pelimpahan (Dumped Tables)
---
-
---
--- Ketidakleluasaan untuk tabel `kelas`
---
-ALTER TABLE `kelas`
-  ADD CONSTRAINT `kelas_ibfk_1` FOREIGN KEY (`id_guru`) REFERENCES `guru` (`id_guru`) ON DELETE NO ACTION ON UPDATE NO ACTION;
-
---
--- Ketidakleluasaan untuk tabel `nilai`
---
-ALTER TABLE `nilai`
-  ADD CONSTRAINT `nilai_ibfk_1` FOREIGN KEY (`id_siswa`) REFERENCES `siswa` (`id_siswa`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `nilai_ibfk_2` FOREIGN KEY (`id_mapel`) REFERENCES `mapel` (`id_mapel`) ON DELETE NO ACTION ON UPDATE NO ACTION;
-
---
--- Ketidakleluasaan untuk tabel `siswa`
---
-ALTER TABLE `siswa`
-  ADD CONSTRAINT `siswa_ibfk_1` FOREIGN KEY (`id_kelas`) REFERENCES `kelas` (`id_kelas`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  MODIFY `id_siswa` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

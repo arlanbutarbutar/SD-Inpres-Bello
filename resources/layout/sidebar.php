@@ -61,7 +61,7 @@
         if ($_SESSION['akses'] <= 2) { ?>
           <li class="nav-item has-submenu">
             <!--//Bootstrap Icons: https://icons.getbootstrap.com/ -->
-            <a class="nav-link submenu-toggle <?php if ($_SESSION['page-to'] == "siswa" || $_SESSION['page-to'] == "kelas" || $_SESSION['page-to'] == "mapel" || $_SESSION['page-to'] == "nilai-siswa" || $_SESSION['page-to'] == "nilai-siswa-terbaik" || $_SESSION['page-to'] == "jadwal") {
+            <a class="nav-link submenu-toggle <?php if ($_SESSION['page-to'] == "siswa" || $_SESSION['page-to'] == "kelas" || $_SESSION['page-to'] == "mapel" || $_SESSION['page-to'] == "nilai-siswa" || $_SESSION['page-to'] == "nilai-siswa-terbaik" || $_SESSION['page-to'] == "jadwal" || $_SESSION['page-to'] == "absensi") {
                                                 echo "active";
                                               } ?>" href="#" data-bs-toggle="collapse" data-bs-target="#submenu-2" aria-expanded="false" aria-controls="submenu-2">
               <span class="nav-icon">
@@ -80,7 +80,7 @@
               <!--//submenu-arrow-->
             </a>
             <!--//nav-link-->
-            <div id="submenu-2" class="collapse submenu submenu-2 <?php if ($_SESSION['page-to'] == "siswa" || $_SESSION['page-to'] == "kelas" || $_SESSION['page-to'] == "mapel" || $_SESSION['page-to'] == "nilai-siswa" || $_SESSION['page-to'] == "nilai-siswa-terbaik" || $_SESSION['page-to'] == "jadwal") {
+            <div id="submenu-2" class="collapse submenu submenu-2 <?php if ($_SESSION['page-to'] == "siswa" || $_SESSION['page-to'] == "kelas" || $_SESSION['page-to'] == "mapel" || $_SESSION['page-to'] == "nilai-siswa" || $_SESSION['page-to'] == "nilai-siswa-terbaik" || $_SESSION['page-to'] == "jadwal" || $_SESSION['page-to'] == "absensi") {
                                                                     echo "show";
                                                                   } ?>" data-bs-parent="#menu-accordion">
               <ul class="submenu-list list-unstyled">
@@ -101,6 +101,11 @@
                 <li class="submenu-item"><a class="submenu-link <?php if ($_SESSION['page-to'] == "jadwal") {
                                                                   echo "active";
                                                                 } ?>" href="jadwal">Jadwal</a></li>
+                <?php if ($_SESSION['akses'] == 2) { ?>
+                <li class="submenu-item"><a class="submenu-link <?php if ($_SESSION['page-to'] == "absensi") {
+                                                                  echo "active";
+                                                                } ?>" href="absensi">Absensi</a></li>
+                <?php } ?>
               </ul>
             </div>
           </li>

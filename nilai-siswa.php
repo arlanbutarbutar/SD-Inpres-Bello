@@ -40,18 +40,6 @@ $_SESSION['page-to'] = "nilai-siswa";
           <div class="col-auto">
             <div class="page-utilities">
               <div class="row g-2 justify-content-start justify-content-md-end align-items-center">
-                <!-- <div class="col-auto">
-                  <form class="docs-search-form row gx-1 align-items-center">
-                    <div class="col-auto">
-                      <input type="text" id="search-docs" name="searchdocs" class="form-control search-docs" placeholder="Search">
-                    </div>
-                    <div class="col-auto">
-                      <button type="submit" class="btn app-btn-secondary">Search</button>
-                    </div>
-                  </form>
-
-                </div> -->
-                <!--//col-->
                 <div class="col-auto">
                   <a class="btn app-btn-primary" href="tambah-nilai"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 16 16">
                       <path fill-rule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2Z" />
@@ -81,6 +69,8 @@ $_SESSION['page-to'] = "nilai-siswa";
                       <th scope="col">Nilai Ulangan</th>
                       <th scope="col">Nilai UTS</th>
                       <th scope="col">Nilai UAS</th>
+                      <th scope="col">Nilai Akhir</th>
+                      <th scope="col">Ket</th>
                       <th scope="col" colspan="2">Aksi</th>
                     </tr>
                   </thead>
@@ -101,6 +91,8 @@ $_SESSION['page-to'] = "nilai-siswa";
                           <td><?= $row['nilai_ulangan'] ?></td>
                           <td><?= $row['nilai_uts'] ?></td>
                           <td><?= $row['nilai_uas'] ?></td>
+                          <td><?= $row['nilai_akhir'] ?></td>
+                          <td><?= $row['ket_nilai'] ?></td>
                           <td>
                             <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#ubah-nilai<?= $row['id_nilai'] ?>">Ubah</button>
                             <div class="modal fade" id="ubah-nilai<?= $row['id_nilai'] ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">

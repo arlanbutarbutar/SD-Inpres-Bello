@@ -54,6 +54,8 @@ $_SESSION['page-to'] = "nilai";
                       <th scope="col">Nilai Ulangan</th>
                       <th scope="col">Nilai UTS</th>
                       <th scope="col">Nilai UAS</th>
+                      <th scope="col">Nilai Akhir</th>
+                      <th scope="col">Ket</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -72,6 +74,8 @@ $_SESSION['page-to'] = "nilai";
                           <td><?= $row['nilai_ulangan'] ?></td>
                           <td><?= $row['nilai_uts'] ?></td>
                           <td><?= $row['nilai_uas'] ?></td>
+                          <td><?= $row['nilai_akhir'] ?></td>
+                          <td><?= $row['ket_nilai'] ?></td>
                         </tr>
                     <?php $no++;
                       }

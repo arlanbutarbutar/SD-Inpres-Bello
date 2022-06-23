@@ -10,19 +10,32 @@
       unset($_SESSION['time-alert']);
     }
   }
-  if(isset($_POST['login'])){
-    if(login($_POST)>0){
-      header("Location: ../"); exit();
-    }else{
-      $_SESSION['message-warning']="Maaf, sepertinya ada kesalahan saat menyambungkan ke database.";
-      $_SESSION['time-message']=time();
-      header("Location: ".$_SESSION['page-to']); exit();
+  if(!isset($_SESSION['id-guru'])){
+    if(isset($_POST['kontak'])){
+      if(kontak($_POST)>0){
+        $_SESSION['message-success']="Anda berhasil mengirimkan pesan.";
+        $_SESSION['time-message']=time();
+        header("Location: beranda"); exit();
+      }else{
+        $_SESSION['message-warning']="Maaf, sepertinya ada kesalahan saat menyambungkan ke database.";
+        $_SESSION['time-message']=time();
+        header("Location: beranda"); exit();
+      }
+    }
+    if(isset($_POST['login'])){
+      if(login($_POST)>0){
+        header("Location: ../"); exit();
+      }else{
+        $_SESSION['message-warning']="Maaf, sepertinya ada kesalahan saat menyambungkan ke database.";
+        $_SESSION['time-message']=time();
+        header("Location: ".$_SESSION['page-to']); exit();
+      }
     }
   }
   if(isset($_SESSION['id-guru'])){
     $nip=htmlspecialchars(addslashes(trim(mysqli_real_escape_string($conn, $_SESSION['nip']))));
     if($_SESSION['akses']==1){
-      $guru=mysqli_query($conn, "SELECT * FROM guru WHERE nip!='$nip'");
+      $guru=mysqli_query($conn, "SELECT * FROM guru WHERE nik!='$nip'");
       if(isset($_POST['tambah-guru'])){
         if(tambahGuru($_POST)>0){
           $_SESSION['message-success']="Data guru berhasil ditambahkan.";
@@ -232,12 +245,70 @@
           header("Location: ".$_SESSION['page-to']); exit();
         }
       }
+      $siswa_perKelas=mysqli_query($conn, "SELECT * FROM siswa JOIN kelas ON siswa.id_kelas=kelas.id_kelas ORDER BY kelas.nama_kelas ASC");
       if($_SESSION['akses']==2){
         $id_guru=htmlspecialchars(addslashes(trim(mysqli_real_escape_string($conn, $_SESSION['id-guru']))));
         $siswa=mysqli_query($conn, "SELECT * FROM siswa JOIN kelas ON kelas.id_kelas=siswa.id_kelas WHERE kelas.id_guru='$id_guru'");
         $nilai=mysqli_query($conn, "SELECT * FROM nilai JOIN siswa ON nilai.id_siswa=siswa.id_siswa JOIN kelas ON siswa.id_kelas=kelas.id_kelas JOIN mapel ON nilai.id_mapel=mapel.id_mapel WHERE kelas.id_guru='$id_guru'");
         $selectSiswa=mysqli_query($conn, "SELECT * FROM siswa JOIN kelas ON kelas.id_kelas=siswa.id_kelas WHERE kelas.id_guru='$id_guru'");
         $jadwal=mysqli_query($conn, "SELECT * FROM jadwal JOIN kelas ON jadwal.id_kelas=kelas.id_kelas JOIN mapel ON jadwal.id_mapel=mapel.id_mapel WHERE kelas.id_guru='$id_guru'");
+        $mapel_absen=mysqli_query($conn, "SELECT * FROM jadwal JOIN mapel ON jadwal.id_mapel=mapel.id_mapel JOIN kelas ON jadwal.id_kelas=kelas.id_kelas WHERE kelas.id_guru='$id_guru'");
+        if(isset($_GET['mapel'])){
+          $id_mapel=htmlspecialchars(addslashes(trim(mysqli_real_escape_string($conn, $_GET['id-mapel']))));
+          $siswa_absen=mysqli_query($conn, "SELECT * FROM siswa 
+            JOIN kelas ON siswa.id_kelas=kelas.id_kelas 
+            JOIN guru ON kelas.id_guru=guru.id_guru
+            JOIN jadwal ON kelas.id_kelas=jadwal.id_kelas
+            JOIN mapel ON jadwal.id_mapel=mapel.id_mapel
+            WHERE mapel.id_mapel='$id_mapel'
+          ");
+          if(isset($_POST['hadir'])){
+            if(absen_hadir($_POST)>0){
+              $_SESSION['message-success']="Data absensi berhasil diubah.";
+              $_SESSION['time-message']=time();
+              header("Location: ".$_SESSION['page-to']); exit();
+            }else{
+              $_SESSION['message-warning']="Maaf, sepertinya ada kesalahan saat menyambungkan ke database.";
+              $_SESSION['time-message']=time();
+              header("Location: ".$_SESSION['page-to']); exit();
+            }
+          }
+          if(isset($_POST['tidak-hadir'])){
+            if(absen_tidak_hadir($_POST)>0){
+              $_SESSION['message-success']="Data absensi berhasil diubah.";
+              $_SESSION['time-message']=time();
+              header("Location: ".$_SESSION['page-to']); exit();
+            }else{
+              $_SESSION['message-warning']="Maaf, sepertinya ada kesalahan saat menyambungkan ke database.";
+              $_SESSION['time-message']=time();
+              header("Location: ".$_SESSION['page-to']); exit();
+            }
+          }
+          if(isset($_POST['alpa'])){
+            if(absen_alpa($_POST)>0){
+              $_SESSION['message-success']="Data absensi berhasil diubah.";
+              $_SESSION['time-message']=time();
+              header("Location: ".$_SESSION['page-to']); exit();
+            }else{
+              $_SESSION['message-warning']="Maaf, sepertinya ada kesalahan saat menyambungkan ke database.";
+              $_SESSION['time-message']=time();
+              header("Location: ".$_SESSION['page-to']); exit();
+            }
+          }
+          $siswa_view=mysqli_query($conn, "SELECT * FROM absensi 
+            JOIN guru ON absensi.id_guru=guru.id_guru
+            JOIN siswa ON absensi.id_siswa=siswa.id_siswa
+            JOIN mapel ON absensi.id_mapel=mapel.id_mapel
+            JOIN kelas ON absensi.id_kelas=kelas.id_kelas 
+            WHERE mapel.id_mapel='$id_mapel'
+          ");
+        }
+        $absensi_cetak=mysqli_query($conn, "SELECT * FROM absensi 
+          JOIN guru ON absensi.id_guru=guru.id_guru
+          JOIN siswa ON absensi.id_siswa=siswa.id_siswa
+          JOIN mapel ON absensi.id_mapel=mapel.id_mapel
+          JOIN kelas ON absensi.id_kelas=kelas.id_kelas 
+        ");
       }
     }
     if($_SESSION['akses']<=3){
@@ -246,7 +317,8 @@
         $nis=htmlspecialchars(addslashes(trim(mysqli_real_escape_string($conn, $_SESSION['nip']))));
         $id_kelas=htmlspecialchars(addslashes(trim(mysqli_real_escape_string($conn, $_SESSION['id-kelas']))));
         $jadwal=mysqli_query($conn, "SELECT * FROM jadwal JOIN kelas ON jadwal.id_kelas=kelas.id_kelas JOIN mapel ON jadwal.id_mapel=mapel.id_mapel WHERE kelas.id_kelas='$id_kelas'");
-        $nilai=mysqli_query($conn, "SELECT * FROM nilai JOIN siswa ON nilai.id_siswa=siswa.id_siswa JOIN kelas ON siswa.id_kelas=kelas.id_kelas JOIN mapel ON nilai.id_mapel=mapel.id_mapel JOIN guru ON kelas.id_guru=guru.id_guru WHERE siswa.nis='$nis'");
+        $cetak_jadwal=mysqli_query($conn, "SELECT * FROM jadwal JOIN kelas ON jadwal.id_kelas=kelas.id_kelas JOIN mapel ON jadwal.id_mapel=mapel.id_mapel JOIN siswa ON kelas.id_kelas=siswa.id_kelas JOIN guru ON kelas.id_guru=guru.id_guru WHERE kelas.id_kelas='$id_kelas'");
+        $nilai=mysqli_query($conn, "SELECT * FROM nilai JOIN siswa ON nilai.id_siswa=siswa.id_siswa JOIN kelas ON siswa.id_kelas=kelas.id_kelas JOIN mapel ON nilai.id_mapel=mapel.id_mapel JOIN guru ON kelas.id_guru=guru.id_guru WHERE siswa.nik='$nis'");
       }
     }
   }

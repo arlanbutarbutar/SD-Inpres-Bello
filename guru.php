@@ -11,6 +11,18 @@ $_SESSION['page-to'] = "guru";
 </head>
 
 <body class="app">
+  <?php if (isset($_SESSION['message-success'])) { ?>
+    <div class="message-success" data-message-success="<?= $_SESSION['message-success'] ?>"></div>
+  <?php }
+  if (isset($_SESSION['message-info'])) { ?>
+    <div class="message-info" data-message-info="<?= $_SESSION['message-info'] ?>"></div>
+  <?php }
+  if (isset($_SESSION['message-warning'])) { ?>
+    <div class="message-warning" data-message-warning="<?= $_SESSION['message-warning'] ?>"></div>
+  <?php }
+  if (isset($_SESSION['message-danger'])) { ?>
+    <div class="message-danger" data-message-danger="<?= $_SESSION['message-danger'] ?>"></div>
+  <?php } ?>
   <header class="app-header fixed-top">
     <?php require_once("resources/layout/navbar.php"); ?>
     <?php require_once("resources/layout/sidebar.php"); ?>
@@ -28,18 +40,6 @@ $_SESSION['page-to'] = "guru";
           <div class="col-auto">
             <div class="page-utilities">
               <div class="row g-2 justify-content-start justify-content-md-end align-items-center">
-                <!-- <div class="col-auto">
-                  <form class="docs-search-form row gx-1 align-items-center">
-                    <div class="col-auto">
-                      <input type="text" id="search-docs" name="searchdocs" class="form-control search-docs" placeholder="Search">
-                    </div>
-                    <div class="col-auto">
-                      <button type="submit" class="btn app-btn-secondary">Search</button>
-                    </div>
-                  </form>
-
-                </div> -->
-                <!--//col-->
                 <div class="col-auto">
                   <a class="btn app-btn-primary" href="tambah-guru"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 16 16">
                       <path fill-rule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2Z" />
@@ -59,27 +59,35 @@ $_SESSION['page-to'] = "guru";
                 <thead>
                   <tr style="border-top: hidden;">
                     <th scope="col">No</th>
+                    <th scope="col">NIK</th>
                     <th scope="col">NIP</th>
+                    <th scope="col">NUPTK</th>
                     <th scope="col">Nama Guru</th>
+                    <th scope="col">Jabatan</th>
                     <th scope="col">Jenis Kelamin</th>
                     <th scope="col">No Tlp</th>
+                    <th scope="col">Status</th>
                     <th scope="col" colspan="2">Aksi</th>
                   </tr>
                 </thead>
-                <tbody>
+                <tbody id="search-page">
                   <?php $no = 1;
                   if (mysqli_num_rows($guru) == 0) { ?>
                     <tr>
-                      <th scope="row" colspan="7">Belum ada data</th>
+                      <th scope="row" colspan="11">Belum ada data</th>
                     </tr>
                     <?php } else if (mysqli_num_rows($guru) > 0) {
                     while ($row = mysqli_fetch_assoc($guru)) { ?>
                       <tr>
                         <th scope="row"><?= $no; ?></th>
+                        <td><?= $row['nik'] ?></td>
                         <td><?= $row['nip'] ?></td>
+                        <td><?= $row['nuptk'] ?></td>
                         <td><?= $row['nama_guru'] ?></td>
+                        <td><?= $row['jabatan'] ?></td>
                         <td><?= $row['jenis_kelamin'] ?></td>
                         <td><?= $row['no_tlp'] ?></td>
+                        <td><?= $row['status'] ?></td>
                         <td>
                           <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#ubah-guru<?= $row['id_guru'] ?>">Ubah</button>
                           <div class="modal fade" id="ubah-guru<?= $row['id_guru'] ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -94,6 +102,14 @@ $_SESSION['page-to'] = "guru";
                                 <form action="" method="POST">
                                   <div class="modal-body">
                                     <div class="form-group">
+                                      <label for="nik">NIK</label>
+                                      <input type="number" name="nik" id="nik" value="<?php if (isset($_POST['nik'])) {
+                                                                                        echo $_POST['nik'];
+                                                                                      } else {
+                                                                                        echo $row['nik'];
+                                                                                      } ?>" class="form-control" placeholder="NIK" required>
+                                    </div>
+                                    <div class="form-group">
                                       <label for="nip">NIP</label>
                                       <input type="number" name="nip" id="nip" value="<?php if (isset($_POST['nip'])) {
                                                                                         echo $_POST['nip'];
@@ -102,12 +118,30 @@ $_SESSION['page-to'] = "guru";
                                                                                       } ?>" class="form-control" placeholder="NIP" required>
                                     </div>
                                     <div class="form-group">
+                                      <label for="nuptk">NUPTK</label>
+                                      <input type="number" name="nuptk" id="nuptk" value="<?php if (isset($_POST['nuptk'])) {
+                                                                                            echo $_POST['nuptk'];
+                                                                                          } else {
+                                                                                            echo $row['nuptk'];
+                                                                                          } ?>" class="form-control" placeholder="NUPTK" required>
+                                    </div>
+                                    <div class="form-group">
                                       <label for="nama-guru">Nama Guru</label>
                                       <input type="text" name="nama-guru" id="nama-guru" value="<?php if (isset($_POST['nama-guru'])) {
                                                                                                   echo $_POST['nama-guru'];
                                                                                                 } else {
                                                                                                   echo $row['nama_guru'];
                                                                                                 } ?>" class="form-control" placeholder="Nama Guru" required>
+                                    </div>
+                                    <div class="form-group">
+                                      <label for="jabatan">Jabatan</label>
+                                      <select name="jabatan" id="jabatan" class="form-control" required>
+                                        <option value="">Jabatan</option>
+                                        <option value="Kepala Sekolah">Kepala Sekolah</option>
+                                        <option value="Wakil Kepala Sekolah">Wakil Kepala Sekolah</option>
+                                        <option value="Guru Mapel">Guru Mapel</option>
+                                        <option value="Penjaga Sekolah">Penjaga Sekolah</option>
+                                      </select>
                                     </div>
                                     <div class="form-group">
                                       <label for="jk">Jenis kelamin</label>
@@ -125,10 +159,21 @@ $_SESSION['page-to'] = "guru";
                                                                                               echo $row['no_tlp'];
                                                                                             } ?>" class="form-control" placeholder="No. Telepon" required>
                                     </div>
+                                    <div class="form-group">
+                                      <label for="status">Status</label>
+                                      <select name="status" id="status" class="form-control" required>
+                                        <option value="">Status</option>
+                                        <option value="Guru Honor">Guru Honor</option>
+                                        <option value="CPNS">CPNS</option>
+                                        <option value="PNS">PNS</option>
+                                      </select>
+                                    </div>
                                   </div>
                                   <div class="modal-footer">
                                     <input type="hidden" name="id-guru" value="<?= $row['id_guru'] ?>">
+                                    <input type="hidden" name="nikOld" value="<?= $row['nik'] ?>">
                                     <input type="hidden" name="nipOld" value="<?= $row['nip'] ?>">
+                                    <input type="hidden" name="nuptkOld" value="<?= $row['nuptk'] ?>">
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
                                     <button type="submit" name="ubah-guru" class="btn btn-warning">Ubah</button>
                                   </div>

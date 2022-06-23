@@ -41,10 +41,16 @@ $_SESSION['page-to'] = "tambah-siswa";
             <form action="" method="POST">
               <div class="modal-body">
                 <div class="form-group">
-                  <label for="nis">NIS</label>
-                  <input type="number" name="nis" id="nis" value="<?php if (isset($_POST['nis'])) {
-                                                                    echo $_POST['nis'];
-                                                                  } ?>" class="form-control" placeholder="NIS" required>
+                  <label for="nik">NIK</label>
+                  <input type="number" name="nik" id="nik" value="<?php if (isset($_POST['nik'])) {
+                                                                    echo $_POST['nik'];
+                                                                  } ?>" class="form-control" placeholder="NIK" required>
+                </div>
+                <div class="form-group">
+                  <label for="nisn">NISN</label>
+                  <input type="number" name="nisn" id="nisn" value="<?php if (isset($_POST['nisn'])) {
+                                                                    echo $_POST['nisn'];
+                                                                  } ?>" class="form-control" placeholder="NISN" required>
                 </div>
                 <div class="form-group">
                   <label for="nama-siswa">Nama Siswa</label>
@@ -82,10 +88,10 @@ $_SESSION['page-to'] = "tambah-siswa";
                                                                             } ?>" class="form-control" placeholder="Tanggal Lahir" required>
                 </div>
                 <div class="form-group">
-                  <label for="nama-ortu">Nama Orang Tua</label>
-                  <input type="text" name="nama-ortu" id="nama-ortu" value="<?php if (isset($_POST['nama-ortu'])) {
-                                                                              echo $_POST['nama-ortu'];
-                                                                            } ?>" class="form-control" placeholder="Nama Orang Tua" required>
+                  <label for="nama-ibu">Nama Ibu</label>
+                  <input type="text" name="nama-ibu" id="nama-ibu" value="<?php if (isset($_POST['nama-ibu'])) {
+                                                                              echo $_POST['nama-ibu'];
+                                                                            } ?>" class="form-control" placeholder="Nama Ibu" required>
                 </div>
               </div>
               <div class="modal-footer justify-content-center">

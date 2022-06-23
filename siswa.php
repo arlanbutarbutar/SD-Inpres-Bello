@@ -40,17 +40,13 @@ $_SESSION['page-to'] = "siswa";
           <div class="col-auto">
             <div class="page-utilities">
               <div class="row g-2 justify-content-start justify-content-md-end align-items-center">
-                <!-- <div class="col-auto">
+                <div class="col-auto">
                   <form class="docs-search-form row gx-1 align-items-center">
                     <div class="col-auto">
-                      <input type="text" id="search-docs" name="searchdocs" class="form-control search-docs" placeholder="Search">
-                    </div>
-                    <div class="col-auto">
-                      <button type="submit" class="btn app-btn-secondary">Search</button>
+                      <input type="text" id="search-in-page" name="searchdocs" class="form-control search-docs" placeholder="Search">
                     </div>
                   </form>
-
-                </div> -->
+                </div>
                 <!--//col-->
                 <?php if ($_SESSION['akses'] == 1) { ?>
                   <div class="col-auto">
@@ -75,33 +71,35 @@ $_SESSION['page-to'] = "siswa";
                   <thead>
                     <tr style="border-top: hidden;">
                       <th scope="col">No</th>
-                      <th scope="col">NIS</th>
+                      <th scope="col">NIK</th>
+                      <th scope="col">NISN</th>
                       <th scope="col">Nama Siswa</th>
                       <th scope="col">Kelas</th>
                       <th scope="col">Jenis Kelamin</th>
                       <th scope="col">TTL</th>
-                      <th scope="col">Nama Ortu</th>
+                      <th scope="col">Nama Ibu</th>
                       <?php if ($_SESSION['akses'] == 1) { ?>
                       <th scope="col" colspan="2">Aksi</th>
                       <?php } ?>
                     </tr>
                   </thead>
-                  <tbody>
+                  <tbody id="search-page">
                     <?php $no = 1;
                     if (mysqli_num_rows($siswa) == 0) { ?>
                       <tr>
-                        <th scope="row" colspan="6">Belum ada data</th>
+                        <th scope="row" colspan="<?php if ($_SESSION['akses'] == 1) {echo "10";}else{echo "8";}?>">Belum ada data</th>
                       </tr>
                       <?php } else if (mysqli_num_rows($siswa) > 0) {
                       while ($row = mysqli_fetch_assoc($siswa)) { ?>
                         <tr>
                           <th scope="row"><?= $no; ?></th>
-                          <td><?= $row['nis'] ?></td>
+                          <td><?= $row['nik'] ?></td>
+                          <td><?= $row['nisn'] ?></td>
                           <td><?= $row['nama_siswa'] ?></td>
                           <td><?= $row['nama_kelas'] ?></td>
                           <td><?= $row['jenis_kelamin'] ?></td>
                           <td><?= $row['ttl'] ?></td>
-                          <td><?= $row['nama_ortu'] ?></td>
+                          <td><?= $row['nama_ibu'] ?></td>
                           <?php if ($_SESSION['akses'] == 1) { ?>
                           <td>
                             <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#ubah-siswa<?= $row['id_siswa'] ?>">Ubah</button>
@@ -117,12 +115,20 @@ $_SESSION['page-to'] = "siswa";
                                   <form action="" method="POST">
                                     <div class="modal-body">
                                       <div class="form-group">
-                                        <label for="nis">NIS</label>
-                                        <input type="number" name="nis" id="nis" value="<?php if (isset($_POST['nis'])) {
-                                                                                          echo $_POST['nis'];
+                                        <label for="nik">NIK</label>
+                                        <input type="number" name="nik" id="nik" value="<?php if (isset($_POST['nik'])) {
+                                                                                          echo $_POST['nik'];
                                                                                         } else {
-                                                                                          echo $row['nis'];
-                                                                                        } ?>" class="form-control" placeholder="NIS" required>
+                                                                                          echo $row['nik'];
+                                                                                        } ?>" class="form-control" placeholder="NIK" required>
+                                      </div>
+                                      <div class="form-group">
+                                        <label for="nisn">NISN</label>
+                                        <input type="number" name="nisn" id="nisn" value="<?php if (isset($_POST['nisn'])) {
+                                                                                          echo $_POST['nisn'];
+                                                                                        } else {
+                                                                                          echo $row['nisn'];
+                                                                                        } ?>" class="form-control" placeholder="NISN" required>
                                       </div>
                                       <div class="form-group">
                                         <label for="nama-siswa">Nama Siswa</label>
@@ -162,17 +168,17 @@ $_SESSION['page-to'] = "siswa";
                                                                                                   } ?>" class="form-control" placeholder="Tanggal Lahir" required>
                                       </div>
                                       <div class="form-group">
-                                        <label for="nama-ortu">Nama Orang Tua</label>
-                                        <input type="text" name="nama-ortu" id="nama-ortu" value="<?php if (isset($_POST['nama-ortu'])) {
-                                                                                                    echo $_POST['nama-ortu'];
+                                        <label for="nama-ibu">Nama Ibu</label>
+                                        <input type="text" name="nama-ibu" id="nama-ibu" value="<?php if (isset($_POST['nama-ibu'])) {
+                                                                                                    echo $_POST['nama-ibu'];
                                                                                                   } else {
-                                                                                                    echo $row['nama_ortu'];
-                                                                                                  } ?>" class="form-control" placeholder="Nama Orang Tua" required>
+                                                                                                    echo $row['nama_ibu'];
+                                                                                                  } ?>" class="form-control" placeholder="Nama Ibu" required>
                                       </div>
                                     </div>
                                     <div class="modal-footer">
                                       <input type="hidden" name="id-siswa" value="<?= $row['id_siswa'] ?>">
-                                      <input type="hidden" name="nisOld" value="<?= $row['nis'] ?>">
+                                      <input type="hidden" name="nisnOld" value="<?= $row['nisn'] ?>">
                                       <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
                                       <button type="submit" name="ubah-siswa" class="btn btn-warning">Ubah</button>
                                     </div>

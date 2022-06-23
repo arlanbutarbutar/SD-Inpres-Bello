@@ -15,10 +15,10 @@ $_SESSION['page-to'] = "nilai-siswa-pdf";
 
 <body class="app" onclick="window.print()">
   <div class="container-xl">
-    <div class="row g-3 mb-4 align-items-center justify-content-between">
+    <div class="row g-3 mb-4 align-items-center justify-content-center">
       <div class="col-auto">
-        <h1>SD Inpres Bello</h1>
-        <h1 class="app-page-title mb-0"><?= $_SESSION['page-name']; ?></h1>
+        <img src="assets/img/cop.png" style="width: 100%;" alt="">
+        <h3 class="mt-3" style="text-align: center;">Daftar Nilai Siswa</h3>
       </div>
       <div class="col-auto">
         <div class="page-utilities">
@@ -34,9 +34,9 @@ $_SESSION['page-to'] = "nilai-siswa-pdf";
     </div>
 
     <!-- Table data nilai siswa -->
-    <div class="row">
-      <div class="col-md-12">
-        <div class="card card-body shadow border-0">
+    <div class="row align-items-center justify-content-center">
+      <div class="col-md-8">
+        <div class="card card-body border-0">
           <div style="overflow-x: auto;">
             <table class="table table-sm text-center">
               <thead>
@@ -49,6 +49,8 @@ $_SESSION['page-to'] = "nilai-siswa-pdf";
                   <th scope="col">Nilai Ulangan</th>
                   <th scope="col">Nilai UTS</th>
                   <th scope="col">Nilai UAS</th>
+                  <th scope="col">Nilai Akhir</th>
+                  <th scope="col">Ket</th>
                 </tr>
               </thead>
               <tbody>
@@ -68,6 +70,8 @@ $_SESSION['page-to'] = "nilai-siswa-pdf";
                       <td><?= $row['nilai_ulangan'] ?></td>
                       <td><?= $row['nilai_uts'] ?></td>
                       <td><?= $row['nilai_uas'] ?></td>
+                      <td><?= $row['nilai_akhir'] ?></td>
+                      <td><?= $row['ket_nilai'] ?></td>
                     </tr>
                 <?php $no++;
                   }

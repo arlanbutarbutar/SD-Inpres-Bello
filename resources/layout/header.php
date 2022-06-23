@@ -11,6 +11,7 @@
           echo $_SESSION['page-name'] . " - ";
         } ?>SD Inpres Bello</title>
 
+<link rel="shortcut icon" href="assets/img/tut-wuri-handayani.png">
 <!-- Custom fonts for this template-->
 <link href="<?php if (isset($_SESSION['auth'])) {
               echo "../";

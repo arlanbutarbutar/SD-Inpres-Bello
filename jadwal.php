@@ -40,18 +40,6 @@ $_SESSION['page-to'] = "jadwal";
           <div class="col-auto">
             <div class="page-utilities">
               <div class="row g-2 justify-content-start justify-content-md-end align-items-center">
-                <!-- <div class="col-auto">
-                  <form class="docs-search-form row gx-1 align-items-center">
-                    <div class="col-auto">
-                      <input type="text" id="search-docs" name="searchdocs" class="form-control search-docs" placeholder="Search">
-                    </div>
-                    <div class="col-auto">
-                      <button type="submit" class="btn app-btn-secondary">Search</button>
-                    </div>
-                  </form>
-
-                </div> -->
-                <!--//col-->
                 <div class="col-auto">
                   <?php if ($_SESSION['akses'] == 1) { ?>
                     <a class="btn app-btn-primary" href="tambah-jadwal"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 16 16">
@@ -78,7 +66,7 @@ $_SESSION['page-to'] = "jadwal";
                       <th scope="col">No</th>
                       <th scope="col">Kelas</th>
                       <th scope="col">Mata Pelajaran</th>
-                      <th scope="col">Jam</th>
+                      <th scope="col">Jam Mulai - Jam Akhir</th>
                       <th scope="col">Hari</th>
                       <?php if ($_SESSION['akses'] == 1) { ?>
                         <th scope="col" colspan="2">Aksi</th>
@@ -89,7 +77,11 @@ $_SESSION['page-to'] = "jadwal";
                     <?php $no = 1;
                     if (mysqli_num_rows($jadwal) == 0) { ?>
                       <tr>
-                        <th scope="row" colspan="7">Belum ada data</th>
+                        <th scope="row" colspan="<?php if ($_SESSION['akses'] == 1) {
+                                                    echo "7";
+                                                  } else {
+                                                    echo "5";
+                                                  } ?>">Belum ada data</th>
                       </tr>
                       <?php } else if (mysqli_num_rows($jadwal) > 0) {
                       while ($row = mysqli_fetch_assoc($jadwal)) { ?>
@@ -97,7 +89,7 @@ $_SESSION['page-to'] = "jadwal";
                           <th scope="row"><?= $no; ?></th>
                           <td><?= $row['nama_kelas'] ?></td>
                           <td><?= $row['nama_mapel'] ?></td>
-                          <td><?= $row['jam'] ?></td>
+                          <td><?= $row['jam_mulai'] . " - " . $row['jam_akhir'] ?></td>
                           <td><?= $row['hari'] ?></td>
                           <?php if ($_SESSION['akses'] == 1) { ?>
                             <td>
@@ -132,10 +124,16 @@ $_SESSION['page-to'] = "jadwal";
                                           </select>
                                         </div>
                                         <div class="form-group">
-                                          <label for="jam">Jam</label>
-                                          <input type="time" name="jam" id="jam" value="<?php if (isset($_POST['jam'])) {
-                                                                                          echo $_POST['jam'];
-                                                                                        } ?>" class="form-control" placeholder="Jam" required>
+                                          <label for="jam_mulai">Jam Mulai</label>
+                                          <input type="time" name="jam_mulai" id="jam_mulai" value="<?php if (isset($_POST['jam_mulai'])) {
+                                                                                                      echo $_POST['jam_mulai'];
+                                                                                                    } ?>" class="form-control" placeholder="Jam Mulai" required>
+                                        </div>
+                                        <div class="form-group">
+                                          <label for="jam_akhir">Jam Akhir</label>
+                                          <input type="time" name="jam_akhir" id="jam_akhir" value="<?php if (isset($_POST['jam_akhir'])) {
+                                                                                                      echo $_POST['jam_akhir'];
+                                                                                                    } ?>" class="form-control" placeholder="Jam Akhir" required>
                                         </div>
                                         <div class="form-group">
                                           <label for="hari">Hari</label>

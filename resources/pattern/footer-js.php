@@ -58,3 +58,12 @@
     })
   }
 </script>
+<script>
+  $(document).ready(function(){
+    $('#search-in-page').on('keyup',function(){
+      $.get('search.php?key='+$('#search-in-page').val(),function(data){
+        $('#search-page').html(data);
+      });
+    });
+  }); 
+</script>

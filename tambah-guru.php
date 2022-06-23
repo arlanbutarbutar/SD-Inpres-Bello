@@ -41,16 +41,38 @@ $_SESSION['page-to'] = "tambah-guru";
             <form action="" method="POST">
               <div class="modal-body">
                 <div class="form-group">
+                  <label for="nik">NIK</label>
+                  <input type="number" name="nik" id="nik" value="<?php if (isset($_POST['nik'])) {
+                                                                    echo $_POST['nik'];
+                                                                  } ?>" class="form-control" placeholder="NIK" required>
+                </div>
+                <div class="form-group">
                   <label for="nip">NIP</label>
                   <input type="number" name="nip" id="nip" value="<?php if (isset($_POST['nip'])) {
                                                                     echo $_POST['nip'];
                                                                   } ?>" class="form-control" placeholder="NIP" required>
                 </div>
                 <div class="form-group">
+                  <label for="nuptk">NUPTK</label>
+                  <input type="number" name="nuptk" id="nuptk" value="<?php if (isset($_POST['nuptk'])) {
+                                                                        echo $_POST['nuptk'];
+                                                                      } ?>" class="form-control" placeholder="NUPTK" required>
+                </div>
+                <div class="form-group">
                   <label for="nama-guru">Nama Guru</label>
                   <input type="text" name="nama-guru" id="nama-guru" value="<?php if (isset($_POST['nama-guru'])) {
                                                                               echo $_POST['nama-guru'];
                                                                             } ?>" class="form-control" placeholder="Nama Guru" required>
+                </div>
+                <div class="form-group">
+                  <label for="jabatan">Jabatan</label>
+                  <select name="jabatan" id="jabatan" class="form-control" required>
+                    <option value="">Jabatan</option>
+                    <option value="Kepala Sekolah">Kepala Sekolah</option>
+                    <option value="Wakil Kepala Sekolah">Wakil Kepala Sekolah</option>
+                    <option value="Guru Mapel">Guru Mapel</option>
+                    <option value="Penjaga Sekolah">Penjaga Sekolah</option>
+                  </select>
                 </div>
                 <div class="form-group">
                   <label for="jk">Jenis kelamin</label>
@@ -65,6 +87,15 @@ $_SESSION['page-to'] = "tambah-guru";
                   <input type="number" name="no-tlp" id="no-tlp" value="<?php if (isset($_POST['no-tlp'])) {
                                                                           echo $_POST['no-tlp'];
                                                                         } ?>" class="form-control" placeholder="No. Telepon" required>
+                </div>
+                <div class="form-group">
+                  <label for="status">Status</label>
+                  <select name="status" id="status" class="form-control" required>
+                    <option value="">Status</option>
+                    <option value="Guru Honor">Guru Honor</option>
+                    <option value="CPNS">CPNS</option>
+                    <option value="PNS">PNS</option>
+                  </select>
                 </div>
               </div>
               <div class="modal-footer justify-content-center">
