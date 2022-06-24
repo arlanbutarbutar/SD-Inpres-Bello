@@ -94,7 +94,7 @@ $_SESSION['page-to'] = "cetak-laporan";
                 <span class="icon-holder">
                   <i class="fas fa-file-pdf pdf-file"></i>
                 </span>
-                <a class="app-card-link-mask" href="nilai-siswa"></a>
+                <a class="app-card-link-mask" href="siswa"></a>
               </div>
               <div class="app-card-body p-3 has-card-actions">
 
@@ -137,17 +137,18 @@ $_SESSION['page-to'] = "cetak-laporan";
             <!--//app-card-->
           </div>
 
+          <?php if(mysqli_num_rows($data_kelas_cetak)>0){while($row_kelas=mysqli_fetch_assoc($data_kelas_cetak)){?>
           <div class="col-6 col-md-4 col-xl-3 col-xxl-2">
             <div class="app-card app-card-doc shadow-sm h-100">
               <div class="app-card-thumb-holder p-3">
                 <span class="icon-holder">
                   <i class="fas fa-file-pdf pdf-file"></i>
                 </span>
-                <a class="app-card-link-mask" href="nilai-siswa"></a>
+                <a class="app-card-link-mask" href="siswa"></a>
               </div>
               <div class="app-card-body p-3 has-card-actions">
 
-                <h4 class="app-doc-title truncate mb-0"><a href="#file-link">Data Siswa per Kelas</a></h4>
+                <h4 class="app-doc-title truncate mb-0"><a href="#file-link">Data Siswa Kelas <?= $row_kelas['nama_kelas']?></a></h4>
                 <div class="app-doc-meta">
                   <ul class="list-unstyled mb-0">
                     <li><span class="text-muted">Type:</span> PDF</li>
@@ -165,11 +166,11 @@ $_SESSION['page-to'] = "cetak-laporan";
                     </div>
                     <!--//dropdown-toggle-->
                     <ul class="dropdown-menu">
-                      <li><a class="dropdown-item" href="siswa-kelas-pdf" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-printer me-2" viewBox="0 0 16 16">
+                      <li><a class="dropdown-item" href="siswa-kelas-pdf?cetak-siswa-kelas=<?= $row_kelas['id_kelas']?>&nama-kelas=<?= $row_kelas['nama_kelas']?>" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-printer me-2" viewBox="0 0 16 16">
                             <path d="M2.5 8a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1z" />
                             <path d="M5 1a2 2 0 0 0-2 2v2H2a2 2 0 0 0-2 2v3a2 2 0 0 0 2 2h1v1a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2v-1h1a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-1V3a2 2 0 0 0-2-2H5zM4 3a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2H4V3zm1 5a2 2 0 0 0-2 2v1H2a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1v-1a2 2 0 0 0-2-2H5zm7 2v3a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1z" />
                           </svg>Print</a></li>
-                      <li><a class="dropdown-item" href="siswa-kelas-export" target="_blank"><svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-download me-2" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                      <li><a class="dropdown-item" href="siswa-kelas-export?cetak-siswa-kelas=<?= $row_kelas['id_kelas']?>&nama-kelas=<?= $row_kelas['nama_kelas']?>" target="_blank"><svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-download me-2" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                             <path fill-rule="evenodd" d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z" />
                             <path fill-rule="evenodd" d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z" />
                           </svg>Unduh</a></li>
@@ -186,14 +187,14 @@ $_SESSION['page-to'] = "cetak-laporan";
             <!--//app-card-->
           </div>
 
-          <?php }if ($_SESSION['akses'] == 2) { ?>
+          <?php }}}if ($_SESSION['akses'] == 2) { ?>
           <div class="col-6 col-md-4 col-xl-3 col-xxl-2">
             <div class="app-card app-card-doc shadow-sm h-100">
               <div class="app-card-thumb-holder p-3">
                 <span class="icon-holder">
                   <i class="fas fa-file-pdf pdf-file"></i>
                 </span>
-                <a class="app-card-link-mask" href="nilai-siswa"></a>
+                <a class="app-card-link-mask" href="absensi"></a>
               </div>
               <div class="app-card-body p-3 has-card-actions">
 

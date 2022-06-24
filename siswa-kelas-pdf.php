@@ -18,7 +18,7 @@ $_SESSION['page-to'] = "siswa-kelas-pdf";
     <div class="row g-3 mb-4 align-items-center justify-content-center">
       <div class="col-auto">
         <img src="assets/img/cop.png" style="width: 100%;" alt="">
-        <h3 class="mt-3" style="text-align: center;">Daftar Siswa per Kelas</h3>
+        <h3 class="mt-3" style="text-align: center;">Daftar Siswa Kelas <?= $nama_kelas?></h3>
       </div>
       <div class="col-auto">
         <div class="page-utilities">

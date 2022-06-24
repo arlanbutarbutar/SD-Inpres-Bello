@@ -27,7 +27,7 @@ if(isset($_SESSION['auth'])){
   if (isset($_SESSION['message-danger'])) { ?>
     <div class="message-danger" data-message-danger="<?= $_SESSION['message-danger'] ?>"></div>
   <?php } ?>
-  <div class="top_container" style="background-image: url('assets/img/bg-header.jpeg');z-index: 0;background-size: cover;height: 100vh;">
+  <div class="top_container" style="background-image: url('assets/img/bg-header.jpg');z-index: 0;background-size: cover;height: 100vh;">
     <!-- header section strats -->
     <?php require_once("resources/layout/navbar-visitor.php"); ?>
     <section class="hero_section mt-5">
