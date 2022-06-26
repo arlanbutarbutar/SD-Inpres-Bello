@@ -245,12 +245,13 @@
           header("Location: ".$_SESSION['page-to']); exit();
         }
       }
-      $data_kelas_cetak=mysqli_query($conn, "SELECT * FROM kelas JOIN siswa ON kelas.id_kelas=siswa.id_kelas");
+      $data_kelas_cetak=mysqli_query($conn, "SELECT * FROM kelas");
       if(isset($_GET['cetak-siswa-kelas'])){
         $id_kelas_cetak=htmlspecialchars(addslashes(trim(mysqli_real_escape_string($conn, $_GET['cetak-siswa-kelas']))));
         $nama_kelas=htmlspecialchars(addslashes(trim(mysqli_real_escape_string($conn, $_GET['nama-kelas']))));
         $siswa_perKelas=mysqli_query($conn, "SELECT * FROM siswa JOIN kelas ON siswa.id_kelas=kelas.id_kelas WHERE siswa.id_kelas='$id_kelas_cetak' ORDER BY kelas.nama_kelas ASC");
       }
+      $cetak_jadwal=mysqli_query($conn, "SELECT * FROM jadwal JOIN kelas ON jadwal.id_kelas=kelas.id_kelas JOIN mapel ON jadwal.id_mapel=mapel.id_mapel JOIN siswa ON kelas.id_kelas=siswa.id_kelas JOIN guru ON kelas.id_guru=guru.id_guru");
       if($_SESSION['akses']==2){
         $id_guru=htmlspecialchars(addslashes(trim(mysqli_real_escape_string($conn, $_SESSION['id-guru']))));
         $siswa=mysqli_query($conn, "SELECT * FROM siswa JOIN kelas ON kelas.id_kelas=siswa.id_kelas WHERE kelas.id_guru='$id_guru'");

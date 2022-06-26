@@ -140,7 +140,7 @@
     $password=htmlspecialchars(addslashes(trim(mysqli_real_escape_string($conn, $data['password']))));
     $guru=mysqli_query($conn, "SELECT * FROM guru WHERE nik='$nip'");
     if(mysqli_num_rows($guru)==0){
-      $siswa=mysqli_query($conn, "SELECT * FROM siswa WHERE nik='$nip'");
+      $siswa=mysqli_query($conn, "SELECT * FROM siswa WHERE nisn='$nip'");
       if(mysqli_num_rows($siswa)==0){
         $_SESSION['message-danger']="Maaf, akun anda belum terdaftar.";
         $_SESSION['time-message']=time();
@@ -284,7 +284,7 @@
     $tgl_lahir=date_create($tgl_lahir);
     $tgl_lahir=date_format($tgl_lahir, "d M Y");
     $ttl=$tempat_lahir.", ".$tgl_lahir;
-    $password=password_hash($nik, PASSWORD_DEFAULT);
+    $password=password_hash($nisn, PASSWORD_DEFAULT);
     $nama_ibu=htmlspecialchars(addslashes(trim(mysqli_real_escape_string($conn, $data['nama-ibu']))));
     mysqli_query($conn, "INSERT INTO siswa(id_kelas,nik,nisn,password,nama_siswa,jenis_kelamin,ttl,nama_ibu) VALUES('$id_kelas','$nik','$nisn','$password','$nama_siswa','$jk','$ttl','$nama_ibu')");
     return mysqli_affected_rows($conn);
@@ -310,7 +310,7 @@
     $tgl_lahir=date_format($tgl_lahir, "d M Y");
     $ttl=$tempat_lahir.", ".$tgl_lahir;
     $nama_ibu=htmlspecialchars(addslashes(trim(mysqli_real_escape_string($conn, $data['nama-ibu']))));
-    $password=password_hash($nik, PASSWORD_DEFAULT);
+    $password=password_hash($nisn, PASSWORD_DEFAULT);
     mysqli_query($conn, "UPDATE siswa SET nik='$nik', nisn='$nisn', password='$password', nama_siswa='$nama_siswa', jenis_kelamin='$jk', ttl='$ttl', nama_ibu='$nama_ibu' WHERE id_siswa='$id_siswa'");
     return mysqli_affected_rows($conn);
   }
@@ -462,9 +462,9 @@
     $tgl=date('Y-m-d');
     $check_siswa=mysqli_query($conn, "SELECT * FROM absensi WHERE id_siswa='$id_siswa' AND tanggal='$tgl'");
     if(mysqli_num_rows($check_siswa)==0){
-      mysqli_query($conn, "INSERT INTO absensi(id_guru,id_siswa,id_mapel,tanggal,status,id_kelas) VALUES('$id_guru','$id_siswa','$id_mapel','$tgl','Hadir','$id_kelas')");
+      mysqli_query($conn, "INSERT INTO absensi(id_guru,id_siswa,id_mapel,tanggal,status_hadir,id_kelas) VALUES('$id_guru','$id_siswa','$id_mapel','$tgl','Hadir','$id_kelas')");
     }else if(mysqli_num_rows($check_siswa)>0){
-      mysqli_query($conn, "UPDATE absensi SET status='Hadir' WHERE id_siswa='$id_siswa' AND tanggal='$tgl'");
+      mysqli_query($conn, "UPDATE absensi SET status_hadir='Hadir' WHERE id_siswa='$id_siswa' AND tanggal='$tgl'");
     }
     return mysqli_affected_rows($conn);
   }
@@ -474,9 +474,9 @@
     $tgl=date('Y-m-d');
     $check_siswa=mysqli_query($conn, "SELECT * FROM absensi WHERE id_siswa='$id_siswa' AND tanggal='$tgl'");
     if(mysqli_num_rows($check_siswa)==0){
-      mysqli_query($conn, "INSERT INTO absensi(id_guru,id_siswa,id_mapel,tanggal,status,id_kelas) VALUES('$id_guru','$id_siswa','$id_mapel','$tgl','Tidak Hadir','$id_kelas')");
+      mysqli_query($conn, "INSERT INTO absensi(id_guru,id_siswa,id_mapel,tanggal,status_hadir,id_kelas) VALUES('$id_guru','$id_siswa','$id_mapel','$tgl','Tidak Hadir','$id_kelas')");
     }else if(mysqli_num_rows($check_siswa)>0){
-      mysqli_query($conn, "UPDATE absensi SET status='Tidak Hadir' WHERE id_siswa='$id_siswa' AND tanggal='$tgl'");
+      mysqli_query($conn, "UPDATE absensi SET status_hadir='Tidak Hadir' WHERE id_siswa='$id_siswa' AND tanggal='$tgl'");
     }
     return mysqli_affected_rows($conn);
   }
@@ -486,9 +486,9 @@
     $tgl=date('Y-m-d');
     $check_siswa=mysqli_query($conn, "SELECT * FROM absensi WHERE id_siswa='$id_siswa' AND tanggal='$tgl'");
     if(mysqli_num_rows($check_siswa)==0){
-      mysqli_query($conn, "INSERT INTO absensi(id_guru,id_siswa,id_mapel,tanggal,status,id_kelas) VALUES('$id_guru','$id_siswa','$id_mapel','$tgl','Alpa','$id_kelas')");
+      mysqli_query($conn, "INSERT INTO absensi(id_guru,id_siswa,id_mapel,tanggal,status_hadir,id_kelas) VALUES('$id_guru','$id_siswa','$id_mapel','$tgl','Alpa','$id_kelas')");
     }else if(mysqli_num_rows($check_siswa)>0){
-      mysqli_query($conn, "UPDATE absensi SET status='Alpa' WHERE id_siswa='$id_siswa' AND tanggal='$tgl'");
+      mysqli_query($conn, "UPDATE absensi SET status_hadir='Alpa' WHERE id_siswa='$id_siswa' AND tanggal='$tgl'");
     }
     return mysqli_affected_rows($conn);
   }

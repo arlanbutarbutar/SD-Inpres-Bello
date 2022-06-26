@@ -22,7 +22,7 @@ $_SESSION['page-to'] = "./";
     <div class="app-content pt-3 p-md-3 p-lg-4" style="height: 85vh;">
       <div class="container-xl">
 
-        <h1 class="app-page-title"><?= $_SESSION['page-name']?></h1>
+        <h1 class="app-page-title"><?= $_SESSION['page-name']; ?></h1>
 
         <div class="app-card alert alert-dismissible shadow-sm mb-4 border-left-decoration" role="alert">
           <div class="inner">

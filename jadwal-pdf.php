@@ -64,8 +64,8 @@ $_SESSION['page-to'] = "jadwal-pdf";
                       <td><?= $row['nama_guru'] ?></td>
                       <td><?= $row['nama_siswa'] ?></td>
                       <td><?= $row['nama_mapel'] ?></td>
-                      <th scope="col">Jam Mulai - Jam Akhir</th>
-                      <th scope="col">Hari</th>
+                      <td><?= $row['jam_mulai'] . " - " . $row['jam_akhir'] ?></td>
+                      <td><?= $row['hari'] ?></td>
                     </tr>
                 <?php $no++;
                   }

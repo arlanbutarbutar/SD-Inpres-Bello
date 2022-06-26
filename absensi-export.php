@@ -9,7 +9,7 @@ $mpdf->WriteHTML('<div style="margin-top: 30px;"><table class="table table-strip
   <thead>
     <tr>
       <th scope="col">No</th>
-      <th scope="col">NIS</th>
+      <th scope="col">NISN</th>
       <th scope="col">Nama Siswa</th>
       <th scope="col">Kelas</th>
       <th scope="col">Status</th>
@@ -30,10 +30,10 @@ if (mysqli_num_rows($absensi_cetak) == 0) {
     $date = date_format($date, "d M Y");
     $mpdf->WriteHTML('<tr>
     <th scope="row">'. $no .'</th>
-    <td>'. $row['nis'] .'</td>
+    <td>'. $row['nisn'] .'</td>
     <td>'. $row['nama_siswa'] .'</td>
     <td>'. $row['nama_kelas'] .'</td>
-    <td>'. $row['status'] .'</td>
+    <td>'. $row['status_hadir'] .'</td>
     <td>'. $date .'</td>
   </tr>
 ');

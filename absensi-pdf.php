@@ -42,7 +42,7 @@ $_SESSION['page-to'] = "absensi-pdf";
               <thead>
                 <tr style="border-top: hidden;">
                   <th scope="col">No</th>
-                  <th scope="col">NIS</th>
+                  <th scope="col">NISN</th>
                   <th scope="col">Nama Siswa</th>
                   <th scope="col">Kelas</th>
                   <th scope="col">Status</th>
@@ -59,10 +59,10 @@ $_SESSION['page-to'] = "absensi-pdf";
                   while ($row = mysqli_fetch_assoc($absensi_cetak)) { ?>
                     <tr>
                       <th scope="row"><?= $no; ?></th>
-                      <td><?= $row['nis'] ?></td>
+                      <td><?= $row['nisn'] ?></td>
                       <td><?= $row['nama_siswa'] ?></td>
                       <td><?= $row['nama_kelas'] ?></td>
-                      <td><?= $row['status'] ?></td>
+                      <td><?= $row['status_hadir'] ?></td>
                       <td><?php $date = date_create($row['tanggal']);
                           echo $date = date_format($date, "d M Y") ?></td>
                     </tr>

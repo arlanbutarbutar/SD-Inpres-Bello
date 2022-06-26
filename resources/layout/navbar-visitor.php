@@ -29,9 +29,11 @@
             <li class="nav-item">
               <a class="nav-link" href="<?php if(isset($_SESSION['auth'])){echo "../";}?>beranda#kontak"> Kontak </a>
             </li>
+            <?php if(!isset($_SESSION['auth'])){?>
             <li class="nav-item">
               <a class="btn btn-primary rounded-pill shadow" href="auth/login"> Login </a>
             </li>
+            <?php }?>
           </ul>
         </div>
     </nav>

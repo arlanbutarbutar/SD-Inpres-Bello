@@ -41,7 +41,9 @@ $_SESSION['page-to'] = "isi-absensi?id-mapel=".$_GET['id-mapel']."&mapel=".$_GET
           <div class="col-auto">
             <h1 class="app-page-title mb-0"><?= $_SESSION['page-name'] . " " . $_GET['mapel'] ." (".date('d M Y').")" ?></h1>
           </div>
-          <!--//col-auto-->
+          <div class="col-auto">
+            <a href="absensi" class="btn app-btn-primary">Kembali</a>
+          </div>
         </div>
 
         <div class="row">
@@ -52,7 +54,7 @@ $_SESSION['page-to'] = "isi-absensi?id-mapel=".$_GET['id-mapel']."&mapel=".$_GET
                   <thead>
                     <tr style="border-top: hidden;">
                       <th scope="col">No</th>
-                      <th scope="col">NIS</th>
+                      <th scope="col">NISN</th>
                       <th scope="col">Nama Siswa</th>
                       <th scope="col">Status</th>
                       <th scope="col">Tgl</th>
@@ -69,7 +71,7 @@ $_SESSION['page-to'] = "isi-absensi?id-mapel=".$_GET['id-mapel']."&mapel=".$_GET
                       while ($row = mysqli_fetch_assoc($siswa_absen)) { ?>
                         <tr>
                           <th scope="row"><?= $no; ?></th>
-                          <td><?= $row['nis'] ?></td>
+                          <td><?= $row['nisn'] ?></td>
                           <td><?= $row['nama_siswa'] ?></td>
                           <?php $date_now=date('Y-m-d'); $id_siswa=$row['id_siswa']; $absensi_status = mysqli_query($conn, "SELECT * FROM absensi JOIN siswa ON absensi.id_siswa=siswa.id_siswa WHERE absensi.id_siswa='$id_siswa' AND tanggal='$date_now'");
                           if (mysqli_num_rows($absensi_status) == 0) { ?>
@@ -77,7 +79,7 @@ $_SESSION['page-to'] = "isi-absensi?id-mapel=".$_GET['id-mapel']."&mapel=".$_GET
                             <td>-</td>
                           <?php } else if (mysqli_num_rows($absensi_status) > 0) {
                             $row_status = mysqli_fetch_assoc($absensi_status); ?>
-                            <td><?= $row_status['status'] ?></td>
+                            <td><?= $row_status['status_hadir'] ?></td>
                             <td><?php $date = date_create($row_status['tanggal']);
                                 echo $date = date_format($date, "d M Y") ?></td>
                           <?php } ?>
