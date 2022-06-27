@@ -35,7 +35,7 @@
   if(isset($_SESSION['id-guru'])){
     $nip=htmlspecialchars(addslashes(trim(mysqli_real_escape_string($conn, $_SESSION['nip']))));
     if($_SESSION['akses']==1){
-      $guru=mysqli_query($conn, "SELECT * FROM guru WHERE nik!='$nip'");
+      $guru=mysqli_query($conn, "SELECT * FROM guru WHERE nik!='$nip' ORDER BY guru.id_guru DESC");
       if(isset($_POST['tambah-guru'])){
         if(tambahGuru($_POST)>0){
           $_SESSION['message-success']="Data guru berhasil ditambahkan.";
@@ -69,7 +69,7 @@
           header("Location: ".$_SESSION['page-to']); exit();
         }
       }
-      $siswa=mysqli_query($conn, "SELECT * FROM siswa JOIN kelas ON kelas.id_kelas=siswa.id_kelas");
+      $siswa=mysqli_query($conn, "SELECT * FROM siswa JOIN kelas ON kelas.id_kelas=siswa.id_kelas ORDER BY siswa.id_siswa DESC");
       if(isset($_POST['tambah-siswa'])){
         if(tambahSiswa($_POST)>0){
           $_SESSION['message-success']="Data siswa berhasil ditambahkan.";
@@ -104,12 +104,12 @@
         }
       }
       $nilai=mysqli_query($conn, "SELECT * FROM nilai JOIN siswa ON nilai.id_siswa=siswa.id_siswa JOIN kelas ON siswa.id_kelas=kelas.id_kelas JOIN mapel ON nilai.id_mapel=mapel.id_mapel");
-      $selectSiswa=mysqli_query($conn, "SELECT * FROM siswa JOIN kelas ON kelas.id_kelas=siswa.id_kelas");
-      $jadwal=mysqli_query($conn, "SELECT * FROM jadwal JOIN kelas ON jadwal.id_kelas=kelas.id_kelas JOIN mapel ON jadwal.id_mapel=mapel.id_mapel");
+      $selectSiswa=mysqli_query($conn, "SELECT * FROM siswa JOIN kelas ON kelas.id_kelas=siswa.id_kelas ORDER BY siswa.nama_siswa ASC");
+      $jadwal=mysqli_query($conn, "SELECT * FROM jadwal JOIN kelas ON jadwal.id_kelas=kelas.id_kelas JOIN mapel ON jadwal.id_mapel=mapel.id_mapel ORDER BY jadwal.id_jadwal DESC");
     }
     if($_SESSION['akses']<=2){
       $selectGuru=mysqli_query($conn, "SELECT * FROM guru");
-      $kelas=mysqli_query($conn, "SELECT * FROM kelas JOIN guru ON kelas.id_guru=guru.id_guru");
+      $kelas=mysqli_query($conn, "SELECT * FROM kelas JOIN guru ON kelas.id_guru=guru.id_guru ORDER BY kelas.id_kelas DESC");
       if(isset($_POST['tambah-kelas'])){
         if(tambahKelas($_POST)>0){
           $_SESSION['message-success']="Data kelas berhasil ditambahkan.";
@@ -143,7 +143,7 @@
           header("Location: ".$_SESSION['page-to']); exit();
         }
       }
-      $mapel=mysqli_query($conn, "SELECT * FROM mapel");
+      $mapel=mysqli_query($conn, "SELECT * FROM mapel ORDER BY id_mapel DESC");
       if(isset($_POST['tambah-mapel'])){
         if(tambahmapel($_POST)>0){
           $_SESSION['message-success']="Data mapel berhasil ditambahkan.";
@@ -261,6 +261,7 @@
         $mapel_absen=mysqli_query($conn, "SELECT * FROM jadwal JOIN mapel ON jadwal.id_mapel=mapel.id_mapel JOIN kelas ON jadwal.id_kelas=kelas.id_kelas WHERE kelas.id_guru='$id_guru'");
         if(isset($_GET['mapel'])){
           $id_mapel=htmlspecialchars(addslashes(trim(mysqli_real_escape_string($conn, $_GET['id-mapel']))));
+          $_SESSION['id-mapel']=$id_mapel;
           $siswa_absen=mysqli_query($conn, "SELECT * FROM siswa 
             JOIN kelas ON siswa.id_kelas=kelas.id_kelas 
             JOIN guru ON kelas.id_guru=guru.id_guru

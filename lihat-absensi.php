@@ -37,8 +37,30 @@ $_SESSION['page-to'] = "lihat-absensi?id-mapel=" . $_GET['id-mapel'] . "&mapel="
 
     <div class="app-content pt-3 p-md-3 p-lg-4">
       <div class="container-xl">
-
-        <h1 class="app-page-title"><?= $_SESSION['page-name'] . " " . $_GET['mapel'] ?></h1>
+        <div class="row g-3 mb-4 align-items-center justify-content-between">
+          <div class="col-auto">
+            <h1 class="app-page-title mb-0"><?= $_SESSION['page-name'] ?></h1>
+          </div>
+          <div class="col-auto">
+            <div class="page-utilities">
+              <div class="row g-2 justify-content-start justify-content-md-end align-items-center">
+                <div class="col-auto">
+                  <form class="docs-search-form row gx-1 align-items-center">
+                    <div class="col-auto">
+                      <input type="text" id="search-in-page" name="searchdocs" class="form-control search-docs" placeholder="Search">
+                    </div>
+                  </form>
+                </div>
+                <div class="col-auto">
+                  <a href="absensi" class="btn app-btn-primary">Kembali</a>
+                </div>
+              </div>
+              <!--//row-->
+            </div>
+            <!--//table-utilities-->
+          </div>
+          <!--//col-auto-->
+        </div>
 
         <div class="row">
           <div class="col-md-12">
@@ -55,7 +77,7 @@ $_SESSION['page-to'] = "lihat-absensi?id-mapel=" . $_GET['id-mapel'] . "&mapel="
                       <th scope="col">Tgl</th>
                     </tr>
                   </thead>
-                  <tbody>
+                  <tbody id="search-page">
                     <?php $no = 1;
                     if (mysqli_num_rows($siswa_view) == 0) { ?>
                       <tr>

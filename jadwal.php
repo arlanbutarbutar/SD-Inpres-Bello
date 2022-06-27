@@ -41,6 +41,13 @@ $_SESSION['page-to'] = "jadwal";
             <div class="page-utilities">
               <div class="row g-2 justify-content-start justify-content-md-end align-items-center">
                 <div class="col-auto">
+                  <form class="docs-search-form row gx-1 align-items-center">
+                    <div class="col-auto">
+                      <input type="text" id="search-in-page" name="searchdocs" class="form-control search-docs" placeholder="Search">
+                    </div>
+                  </form>
+                </div>
+                <div class="col-auto">
                   <?php if ($_SESSION['akses'] == 1) { ?>
                     <a class="btn app-btn-primary" href="tambah-jadwal"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 16 16">
                         <path fill-rule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2Z" />
@@ -73,7 +80,7 @@ $_SESSION['page-to'] = "jadwal";
                       <?php } ?>
                     </tr>
                   </thead>
-                  <tbody>
+                  <tbody id="search-page">
                     <?php $no = 1;
                     if (mysqli_num_rows($jadwal) == 0) { ?>
                       <tr>
