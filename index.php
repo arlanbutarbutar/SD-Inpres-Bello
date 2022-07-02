@@ -30,7 +30,11 @@ $_SESSION['page-to'] = "./";
               <h3 class="mb-3">Selamat datang, <?= $_SESSION['nama-guru'] ?>!</h3>
               <div class="row gx-5 gy-3">
                 <div class="col-12 col-lg-8">
-
+                  <?php if($_SESSION['akses']==3){if($_SESSION['status-siswa']==1){?>
+                    <h6>Anda berstatus aktif sebagai siswa di Sekolah Dasar Inpres Bello.</h6>
+                  <?php }else if($_SESSION['status-siswa']==2){?>
+                    <h6>Selamat, anda telah dinyatakan lulus dari Sekolah Dasar Inpres Bello.</h6>
+                  <?php }}?>
                   <div>SD Inpres Bello merupakan suatu Instansi Negeri yang berdiri pada tahun 1983 dan bergerak di bidang pendidikan dasar yang beralamat di jalan. H.R. Koroh, kelurahan Bello kecamatan Maulafa, Kota Kupang.</div>
                 </div>
                 <!--//col-->

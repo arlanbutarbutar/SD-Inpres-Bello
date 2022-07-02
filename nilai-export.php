@@ -9,6 +9,7 @@ $mpdf->WriteHTML('<table class="table table-striped" style="text-align: center;w
   <thead>
     <tr>
     <th scope="col">No</th>
+    <th scope="col">Tgl Nilai</th>
     <th scope="col">Mata Pelajaran</th>
     <th scope="col">Guru</th>
     <th scope="col">Nilai Tugas</th>
@@ -29,8 +30,11 @@ if (mysqli_num_rows($nilai) == 0) {
 ');
 } else if (mysqli_num_rows($nilai) > 0) {
   while ($row = mysqli_fetch_assoc($nilai)) {
+    $tgl_nilai=date_create($row['tgl_nilai']);
+    $tgl_nilai=date_format($tgl_nilai, "d M Y");
     $mpdf->WriteHTML('<tr>
     <th scope="row">'. $no .'</th>
+    <td>'. $tgl_nilai .'</td>
     <td>'. $row["nama_mapel"] .'</td>
     <td>'. $row["nama_guru"] .'</td>
     <td>'. $row["nilai_tugas"] .'</td>

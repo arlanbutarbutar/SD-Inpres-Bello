@@ -5,7 +5,7 @@ require_once __DIR__ . '/vendor/autoload.php';
 $mpdf = new \Mpdf\Mpdf();
 $mpdf->WriteHTML('<img src="assets/img/cop.png" style="width: 100%;" alt="">');
 $mpdf->WriteHTML('<h3 style="text-align: center;">Daftar Siswa</h3>');
-$mpdf->WriteHTML('<div style="margin-top: 30px;"><table class="table table-striped" style="width: 100%;">
+$mpdf->WriteHTML('<div style="margin-top: 30px;"><table class="table table-striped" style="width: 100%;text-align: center;">
   <thead>
     <tr>
       <th scope="col">No</th>
@@ -13,6 +13,7 @@ $mpdf->WriteHTML('<div style="margin-top: 30px;"><table class="table table-strip
       <th scope="col">NISN</th>
       <th scope="col">Nama Siswa</th>
       <th scope="col">Kelas</th>
+      <th scope="col">Tahun Ajaran</th>
       <th scope="col">Jenis Kelamin</th>
       <th scope="col">TTL</th>
       <th scope="col">Nama Ibu</th>
@@ -34,6 +35,7 @@ if (mysqli_num_rows($nilai) == 0) {
     <td>'. $row['nisn'] .'</td>
     <td>'. $row['nama_siswa'] .'</td>
     <td>'. $row['nama_kelas'] .'</td>
+    <td>'. $row['tahunajar'] .'</td>
     <td>'. $row['jenis_kelamin'] .'</td>
     <td>'. $row['ttl'] .'</td>
     <td>'. $row['nama_ibu'] .'</td>

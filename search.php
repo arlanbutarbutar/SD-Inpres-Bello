@@ -1,14 +1,18 @@
 <?php require_once('controller/script.php');
 if ($_SESSION['page-to'] == "siswa") {
-  if (isset($_GET['key']) && $_GET['key'] != "") {
+  if (isset($_GET['key'])) {
     $key = addslashes(trim($_GET['key']));
     if ($_SESSION['akses'] == 1) {
       $query = "SELECT * FROM siswa 
         JOIN kelas ON kelas.id_kelas=siswa.id_kelas 
-        WHERE siswa.nik LIKE '%$key%' 
+        WHERE siswa.status_siswa=1
+        AND siswa.nik LIKE '%$key%' 
         OR siswa.nisn LIKE '%$key%' 
+        AND siswa.status_siswa=1
         OR siswa.nama_siswa LIKE '%$key%' 
+        AND siswa.status_siswa=1
         OR kelas.nama_kelas LIKE '%$key%' 
+        AND siswa.status_siswa=1
         ORDER BY siswa.id_siswa DESC
       ";
     } else if ($_SESSION['akses'] == 2) {
@@ -17,35 +21,78 @@ if ($_SESSION['page-to'] == "siswa") {
         JOIN kelas ON kelas.id_kelas=siswa.id_kelas 
         WHERE siswa.nik LIKE '%$key%' 
         AND kelas.id_guru='$id_guru' 
+        AND siswa.status_siswa=1
         OR siswa.nisn LIKE '%$key%' 
         AND kelas.id_guru='$id_guru' 
+        AND siswa.status_siswa=1
         OR siswa.nama_siswa LIKE '%$key%' 
         AND kelas.id_guru='$id_guru' 
+        AND siswa.status_siswa=1
         OR kelas.nama_kelas LIKE '%$key%' 
         AND kelas.id_guru='$id_guru' 
+        AND siswa.status_siswa=1
         ORDER BY siswa.id_siswa DESC
       ";
     }
     $siswa = mysqli_query($conn, $query);
-  }
-  if (mysqli_num_rows($siswa) == 0) { ?>
+  }if (mysqli_num_rows($siswa) == 0) { ?>
     <tr>
-      <th scope="row" colspan="<?php if ($_SESSION['akses'] == 1) {
-                                  echo "10";
-                                } else {
-                                  echo "8";
-                                } ?>">Belum ada data</th>
+      <th scope="row" colspan="<?php if ($_SESSION['akses'] == 1) {echo "11";} else {echo "9";} ?>">Belum ada data</th>
     </tr>
-    <?php }
-  $no = 1;
-  if (mysqli_num_rows($siswa) > 0) {
-    while ($row = mysqli_fetch_assoc($siswa)) { ?>
+    <?php }$no = 1;if (mysqli_num_rows($siswa) > 0) {while ($row = mysqli_fetch_assoc($siswa)) { ?>
       <tr>
         <th scope="row"><?= $no; ?></th>
         <td><?= $row['nik'] ?></td>
         <td><?= $row['nisn'] ?></td>
         <td><?= $row['nama_siswa'] ?></td>
-        <td><?= $row['nama_kelas'] ?></td>
+        <td><?= $row['nama_kelas'] ?> <?php if($_SESSION['akses']==2){?><span style="cursor: pointer;" class="badge badge-success shadow" data-toggle="modal" data-target="#exampleModal">Ubah</span><?php }?></td>
+        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header border-bottom-0">
+                <h5 class="modal-title" id="exampleModalLabel"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <?php 
+                $kelas=preg_replace("/[^0-9]/", "", $row['nama_kelas']);
+                $kelas_az=preg_replace("/[^a-zA-Z]/", "", $row['nama_kelas']);
+                if($kelas<6){
+              ?>
+              <div class="modal-body text-center">
+                Apakah siswa dengan nama <?= $row['nama_siswa']?> naik kelas?
+              </div>
+              <div class="modal-footer border-top-0 justify-content-center">
+                <form action="" method="POST">
+                  <button type="button" name="tidak-naik" class="btn btn-secondary" data-dismiss="modal">Tidak Naik</button>
+                </form>
+                <form action="" method="POST">
+                  <input type="hidden" name="id-siswa" value="<?= $row['id_siswa']?>">
+                  <input type="hidden" name="kelas" value="<?= $kelas?>">
+                  <input type="hidden" name="kelas-az" value="<?= $kelas_az?>">
+                  <input type="hidden" name="nama-siswa" value="<?= $row['nama_siswa']?>">
+                  <button type="submit" name="naik-kelas" class="btn btn-primary text-white">Naik Kelas</button>
+                </form>
+              </div>
+              <?php }else if($kelas==6){?>
+              <div class="modal-body text-center">
+                Apakah siswa dengan nama <?= $row['nama_siswa']?> telah dinyatakan lulus?
+              </div>
+              <div class="modal-footer border-top-0 justify-content-center">
+                <form action="" method="POST">
+                  <button type="button" name="tidak-lulus" class="btn btn-secondary" data-dismiss="modal">Tidak Lulus</button>
+                </form>
+                <form action="" method="POST">
+                  <input type="hidden" name="id-siswa" value="<?= $row['id_siswa']?>">
+                  <button type="submit" name="lulus" class="btn btn-primary text-white">Lulus</button>
+                </form>
+              </div>
+              <?php }?>
+            </div>
+          </div>
+        </div>
+        <td><?= $row['tahunajar'] ?></td>
         <td><?= $row['jenis_kelamin'] ?></td>
         <td><?= $row['ttl'] ?></td>
         <td><?= $row['nama_ibu'] ?></td>
@@ -65,64 +112,34 @@ if ($_SESSION['page-to'] == "siswa") {
                     <div class="modal-body">
                       <div class="form-group">
                         <label for="nik">NIK</label>
-                        <input type="number" name="nik" id="nik" value="<?php if (isset($_POST['nik'])) {
-                                                                          echo $_POST['nik'];
-                                                                        } else {
-                                                                          echo $row['nik'];
-                                                                        } ?>" class="form-control" placeholder="NIK" required>
+                        <input type="number" name="nik" id="nik" value="<?php if (isset($_POST['nik'])) {echo $_POST['nik'];} else {echo $row['nik'];} ?>" class="form-control" placeholder="NIK" required>
                       </div>
                       <div class="form-group">
                         <label for="nisn">NISN</label>
-                        <input type="number" name="nisn" id="nisn" value="<?php if (isset($_POST['nisn'])) {
-                                                                            echo $_POST['nisn'];
-                                                                          } else {
-                                                                            echo $row['nisn'];
-                                                                          } ?>" class="form-control" placeholder="NISN" required>
+                        <input type="number" name="nisn" id="nisn" value="<?php if (isset($_POST['nisn'])) {echo $_POST['nisn'];} else {echo $row['nisn'];} ?>" class="form-control" placeholder="NISN" required>
                       </div>
                       <div class="form-group">
                         <label for="nama-siswa">Nama Siswa</label>
-                        <input type="text" name="nama-siswa" id="nama-siswa" value="<?php if (isset($_POST['nama-siswa'])) {
-                                                                                      echo $_POST['nama-siswa'];
-                                                                                    } else {
-                                                                                      echo $row['nama_siswa'];
-                                                                                    } ?>" class="form-control" placeholder="Nama Siswa" required>
-                      </div>
-                      <div class="form-group">
-                        <label for="kelas">Kelas</label>
-                        <select name="id-kelas" id="kelas" class="form-control" required>
-                          <option value="">Pilih Kelas</option>
-                          <?php foreach ($kelas as $rowK) : ?>
-                            <option value="<?= $rowK['id_kelas'] ?>"><?= $rowK['nama_kelas'] ?></option>
-                          <?php endforeach; ?>
-                        </select>
+                        <input type="text" name="nama-siswa" id="nama-siswa" value="<?php if (isset($_POST['nama-siswa'])) {echo $_POST['nama-siswa'];} else {echo $row['nama_siswa'];} ?>" class="form-control" placeholder="Nama Siswa" required>
                       </div>
                       <div class="form-group">
                         <label for="jk">Jenis kelamin</label>
                         <select name="jk" id="jk" class="form-control" required>
-                          <option value="">Pilih Jenis Kelamin</option>
-                          <option value="Laki-Laki">Laki-Laki</option>
-                          <option value="Perempuan">Perempuan</option>
+                          <option value="<?= $row['jenis_kelamin'] ?>">
+                            <?php if ($row['jenis_kelamin'] == "Laki-Laki") {echo "Laki-Laki";} else if ($row['jenis_kelamin'] == "Perempuan") {echo "Perempuan";} ?>
+                          </option>
+                          <option value="<?php if ($row['jenis_kelamin'] == "Laki-Laki") {echo "Perempuan";} else if ($row['jenis_kelamin'] == "Perempuan") {echo "Laki-Laki";} ?>">
+                            <?php if ($row['jenis_kelamin'] == "Laki-Laki") {echo "Perempuan";} else if ($row['jenis_kelamin'] == "Perempuan") {echo "Laki-Laki";} ?>
+                          </option>
                         </select>
                       </div>
                       <div class="form-group">
-                        <label for="tempat-lahir">Tempat Lahir</label>
-                        <input type="text" name="tempat-lahir" id="tempat-lahir" value="<?php if (isset($_POST['tempat-lahir'])) {
-                                                                                          echo $_POST['tempat-lahir'];
-                                                                                        } ?>" class="form-control" placeholder="Tempat Lahir" required>
-                      </div>
-                      <div class="form-group">
-                        <label for="tgl-lahir">Tanggal Lahir</label>
-                        <input type="date" name="tgl-lahir" id="tgl-lahir" value="<?php if (isset($_POST['tgl-lahir'])) {
-                                                                                    echo $_POST['tgl-lahir'];
-                                                                                  } ?>" class="form-control" placeholder="Tanggal Lahir" required>
+                        <label for="ttl">TTL <small>(Tempat Tanggal Lahir)</small></label>
+                        <input type="text" name="ttl" id="ttl" value="<?php if (isset($_POST['ttl'])) {echo $_POST['ttl'];} else {echo $row['ttl'];} ?>" class="form-control" placeholder="Tempat Lahir" required>
                       </div>
                       <div class="form-group">
                         <label for="nama-ibu">Nama Ibu</label>
-                        <input type="text" name="nama-ibu" id="nama-ibu" value="<?php if (isset($_POST['nama-ibu'])) {
-                                                                                  echo $_POST['nama-ibu'];
-                                                                                } else {
-                                                                                  echo $row['nama_ibu'];
-                                                                                } ?>" class="form-control" placeholder="Nama Ibu" required>
+                        <input type="text" name="nama-ibu" id="nama-ibu" value="<?php if (isset($_POST['nama-ibu'])) {echo $_POST['nama-ibu'];} else {echo $row['nama_ibu'];} ?>" class="form-control" placeholder="Nama Ibu" required>
                       </div>
                     </div>
                     <div class="modal-footer">
@@ -167,15 +184,76 @@ if ($_SESSION['page-to'] == "siswa") {
     }
   }
 }
+if ($_SESSION['page-to'] == "siswa-lulus") {
+  if (isset($_GET['key'])) {
+    $key = addslashes(trim($_GET['key']));
+    if ($_SESSION['akses'] == 1) {
+      $query = "SELECT * FROM siswa 
+        JOIN kelas ON kelas.id_kelas=siswa.id_kelas 
+        WHERE siswa.status_siswa=2
+        AND siswa.nik LIKE '%$key%' 
+        OR siswa.nisn LIKE '%$key%' 
+        AND siswa.status_siswa=2
+        OR siswa.nama_siswa LIKE '%$key%' 
+        AND siswa.status_siswa=2
+        OR kelas.nama_kelas LIKE '%$key%' 
+        AND siswa.status_siswa=2
+        ORDER BY siswa.id_siswa DESC
+      ";
+    } else if ($_SESSION['akses'] == 2) {
+      $id_guru = htmlspecialchars(addslashes(trim(mysqli_real_escape_string($conn, $_SESSION['id-guru']))));
+      $query = "SELECT * FROM siswa 
+        JOIN kelas ON kelas.id_kelas=siswa.id_kelas 
+        WHERE siswa.nik LIKE '%$key%' 
+        AND kelas.id_guru='$id_guru' 
+        AND siswa.status_siswa=2
+        OR siswa.nisn LIKE '%$key%' 
+        AND kelas.id_guru='$id_guru' 
+        AND siswa.status_siswa=2
+        OR siswa.nama_siswa LIKE '%$key%' 
+        AND kelas.id_guru='$id_guru' 
+        AND siswa.status_siswa=2
+        OR kelas.nama_kelas LIKE '%$key%' 
+        AND kelas.id_guru='$id_guru' 
+        AND siswa.status_siswa=2
+        ORDER BY siswa.id_siswa DESC
+      ";
+    }
+    $siswa = mysqli_query($conn, $query);
+  }if (mysqli_num_rows($siswa) == 0) { ?>
+    <tr>
+      <th scope="row" colspan="9">Belum ada data</th>
+    </tr>
+    <?php }$no = 1;if (mysqli_num_rows($siswa) > 0) {while ($row = mysqli_fetch_assoc($siswa)) { 
+      $tgl_lulus=date_create($row['tgl_lulus']);
+      $tgl_lulus=date_format($tgl_lulus, "d M Y");?>
+      <tr>
+        <th scope="row"><?= $no; ?></th>
+        <td><?= $row['nik'] ?></td>
+        <td><?= $row['nisn'] ?></td>
+        <td><?= $row['nama_siswa'] ?></td>
+        <td><?= $row['jenis_kelamin'] ?></td>
+        <td><?= $row['ttl'] ?></td>
+        <td><?= $row['nama_ibu'] ?></td>
+        <td><?= $row['tahunajar'] ?></td>
+        <td><?= $tgl_lulus ?></td>
+      </tr>
+    <?php $no++;
+    }
+  }
+}
 if ($_SESSION['page-to'] == "guru") {
-  if (isset($_GET['key']) && $_GET['key'] != "") {
+  if (isset($_GET['key'])) {
     $key = addslashes(trim($_GET['key']));
     $query = "SELECT * FROM guru 
       WHERE nik!='$nip' 
       AND nik LIKE '%$key%' 
       OR nip LIKE '%$key%' 
+      AND nik!='$nip' 
       OR nama_guru LIKE '%$key%' 
+      AND nik!='$nip' 
       OR nuptk LIKE '%$key%' 
+      AND nik!='$nip' 
       ORDER BY id_guru DESC
     ";
     $guru = mysqli_query($conn, $query);
@@ -213,69 +291,63 @@ if ($_SESSION['page-to'] == "guru") {
                   <div class="modal-body">
                     <div class="form-group">
                       <label for="nik">NIK</label>
-                      <input type="number" name="nik" id="nik" value="<?php if (isset($_POST['nik'])) {
-                                                                        echo $_POST['nik'];
-                                                                      } else {
-                                                                        echo $row['nik'];
-                                                                      } ?>" class="form-control" placeholder="NIK" required>
+                      <input type="number" name="nik" id="nik" value="<?php if (isset($_POST['nik'])) {echo $_POST['nik'];} else {echo $row['nik'];} ?>" class="form-control" placeholder="NIK" required>
                     </div>
                     <div class="form-group">
                       <label for="nip">NIP</label>
-                      <input type="number" name="nip" id="nip" value="<?php if (isset($_POST['nip'])) {
-                                                                        echo $_POST['nip'];
-                                                                      } else {
-                                                                        echo $row['nip'];
-                                                                      } ?>" class="form-control" placeholder="NIP" required>
+                      <input type="number" name="nip" id="nip" value="<?php if (isset($_POST['nip'])) {echo $_POST['nip'];} else {echo $row['nip'];} ?>" class="form-control" placeholder="NIP" required>
                     </div>
                     <div class="form-group">
                       <label for="nuptk">NUPTK</label>
-                      <input type="number" name="nuptk" id="nuptk" value="<?php if (isset($_POST['nuptk'])) {
-                                                                            echo $_POST['nuptk'];
-                                                                          } else {
-                                                                            echo $row['nuptk'];
-                                                                          } ?>" class="form-control" placeholder="NUPTK" required>
+                      <input type="number" name="nuptk" id="nuptk" value="<?php if (isset($_POST['nuptk'])) {echo $_POST['nuptk'];} else {echo $row['nuptk'];} ?>" class="form-control" placeholder="NUPTK" required>
                     </div>
                     <div class="form-group">
                       <label for="nama-guru">Nama Guru</label>
-                      <input type="text" name="nama-guru" id="nama-guru" value="<?php if (isset($_POST['nama-guru'])) {
-                                                                                  echo $_POST['nama-guru'];
-                                                                                } else {
-                                                                                  echo $row['nama_guru'];
-                                                                                } ?>" class="form-control" placeholder="Nama Guru" required>
+                      <input type="text" name="nama-guru" id="nama-guru" value="<?php if (isset($_POST['nama-guru'])) {echo $_POST['nama-guru'];} else {echo $row['nama_guru'];} ?>" class="form-control" placeholder="Nama Guru" required>
                     </div>
                     <div class="form-group">
                       <label for="jabatan">Jabatan</label>
                       <select name="jabatan" id="jabatan" class="form-control" required>
-                        <option value="">Jabatan</option>
-                        <option value="Kepala Sekolah">Kepala Sekolah</option>
-                        <option value="Wakil Kepala Sekolah">Wakil Kepala Sekolah</option>
-                        <option value="Guru Mapel">Guru Mapel</option>
-                        <option value="Penjaga Sekolah">Penjaga Sekolah</option>
+                        <?php 
+                          $jabatan=$row['jabatan'];
+                          $select_jabatan=mysqli_query($conn, "SELECT * FROM jabatan WHERE jabatan!='$jabatan'");
+                          $select_jabatanView=mysqli_query($conn, "SELECT * FROM jabatan WHERE jabatan='$jabatan'");
+                          $row_jabatanView=mysqli_fetch_assoc($select_jabatanView);
+                        ?>
+                        <option value="<?= $row_jabatanView['jabatan']?>"><?= $row_jabatanView['jabatan']?></option>
+                        <?php foreach($select_jabatan as $row_jabatan):?>
+                        <option value="<?= $row_jabatan['jabatan']?>"><?= $row_jabatan['jabatan']?></option>
+                        <?php endforeach;?>
                       </select>
                     </div>
                     <div class="form-group">
                       <label for="jk">Jenis kelamin</label>
                       <select name="jk" id="jk" class="form-control" required>
-                        <option value="">Pilih Jenis Kelamin</option>
-                        <option value="Laki-Laki">Laki-Laki</option>
-                        <option value="Perempuan">Perempuan</option>
+                        <option value="<?= $row['jenis_kelamin']?>">
+                          <?php if($row['jenis_kelamin']=="Laki-Laki"){echo "Laki-Laki";}else if($row['jenis_kelamin']=="Perempuan"){echo "Perempuan";}?>
+                        </option>
+                        <option value="<?php if($row['jenis_kelamin']=="Laki-Laki"){echo "Perempuan";}else if($row['jenis_kelamin']=="Perempuan"){echo "Laki-Laki";}?>">
+                          <?php if($row['jenis_kelamin']=="Laki-Laki"){echo "Perempuan";}else if($row['jenis_kelamin']=="Perempuan"){echo "Laki-Laki";}?>
+                        </option>
                       </select>
                     </div>
                     <div class="form-group">
                       <label for="no-tlp">No. Telepon</label>
-                      <input type="number" name="no-tlp" id="no-tlp" value="<?php if (isset($_POST['no-tlp'])) {
-                                                                              echo $_POST['no-tlp'];
-                                                                            } else {
-                                                                              echo $row['no_tlp'];
-                                                                            } ?>" class="form-control" placeholder="No. Telepon" required>
+                      <input type="number" name="no-tlp" id="no-tlp" value="<?php if (isset($_POST['no-tlp'])) {echo $_POST['no-tlp'];} else {echo $row['no_tlp'];} ?>" class="form-control" placeholder="No. Telepon" required>
                     </div>
                     <div class="form-group">
                       <label for="status">Status</label>
                       <select name="status" id="status" class="form-control" required>
-                        <option value="">Status</option>
-                        <option value="Guru Honor">Guru Honor</option>
-                        <option value="CPNS">CPNS</option>
-                        <option value="PNS">PNS</option>
+                        <?php 
+                          $status=$row['status'];
+                          $select_status=mysqli_query($conn, "SELECT * FROM status_guru WHERE status!='$status'");
+                          $select_statusView=mysqli_query($conn, "SELECT * FROM status_guru WHERE status='$status'");
+                          $row_statusView=mysqli_fetch_assoc($select_statusView);
+                        ?>
+                        <option value="<?= $row_statusView['status']?>"><?= $row_statusView['status']?></option>
+                        <?php foreach($select_status as $row_status):?>
+                        <option value="<?= $row_status['status']?>"><?= $row_status['status']?></option>
+                        <?php endforeach;?>
                       </select>
                     </div>
                   </div>
@@ -323,7 +395,7 @@ if ($_SESSION['page-to'] == "guru") {
   }
 }
 if ($_SESSION['page-to'] == "kelas") {
-  if (isset($_GET['key']) && $_GET['key'] != "") {
+  if (isset($_GET['key'])) {
     $key = addslashes(trim($_GET['key']));
     $query = "SELECT * FROM kelas 
       JOIN guru ON kelas.id_guru=guru.id_guru 
@@ -363,36 +435,30 @@ if ($_SESSION['page-to'] == "kelas") {
                   <div class="modal-body">
                     <div class="form-group">
                       <label for="nama-kelas">Kelas</label>
-                      <input type="text" name="nama-kelas" id="nama-kelas" value="<?php if (isset($_POST['nama-kelas'])) {
-                                                                                    echo $_POST['nama-kelas'];
-                                                                                  } else {
-                                                                                    echo $row['nama_kelas'];
-                                                                                  } ?>" class="form-control" placeholder="Kelas" required>
+                      <input type="text" name="nama-kelas" id="nama-kelas" value="<?php if (isset($_POST['nama-kelas'])) {echo $_POST['nama-kelas'];} else {echo $row['nama_kelas'];} ?>" class="form-control" placeholder="Kelas" required>
                     </div>
                     <div class="form-group">
                       <label for="guru">Guru</label>
                       <select name="id-guru" id="guru" class="form-control" required>
-                        <option value="">Pilih Guru</option>
-                        <?php foreach ($selectGuru as $rowSG) : ?>
+                        <?php 
+                          $id_guru=$row['id_guru'];
+                          $select_guru=mysqli_query($conn, "SELECT * FROM guru WHERE id_guru!='$id_guru' AND id_guru>1");
+                          $select_guruView=mysqli_query($conn, "SELECT * FROM guru WHERE id_guru='$id_guru' AND id_guru>1");
+                          $row_guruView=mysqli_fetch_assoc($select_guruView);
+                        ?>
+                        <option value="<?= $row_guruView['id_guru']?>"><?= $row_guruView['nama_guru']?></option>
+                        <?php foreach ($select_guru as $rowSG) : ?>
                           <option value="<?= $rowSG['id_guru'] ?>"><?= $rowSG['nama_guru'] ?></option>
                         <?php endforeach; ?>
                       </select>
                     </div>
                     <div class="form-group">
                       <label for="semester">Semester</label>
-                      <input type="text" name="semester" id="semester" value="<?php if (isset($_POST['semester'])) {
-                                                                                echo $_POST['semester'];
-                                                                              } else {
-                                                                                echo $row['semester'];
-                                                                              } ?>" class="form-control" placeholder="Semester" required>
+                      <input type="text" name="semester" id="semester" value="<?php if (isset($_POST['semester'])) {echo $_POST['semester'];} else {echo $row['semester'];} ?>" class="form-control" placeholder="Semester" required>
                     </div>
                     <div class="form-group">
                       <label for="tahun-ajar">Tahun Ajar</label>
-                      <input type="date" name="tahun-ajar" id="tahun-ajar" value="<?php if (isset($_POST['tahun-ajar'])) {
-                                                                                    echo $_POST['tahun-ajar'];
-                                                                                  } else {
-                                                                                    echo $row['tahunajar'];
-                                                                                  } ?>" class="form-control" placeholder="Tahun Ajar" required>
+                      <input type="text" name="tahun-ajar" id="tahun-ajar" value="<?php if (isset($_POST['tahun-ajar'])) {echo $_POST['tahun-ajar'];} else {echo $row['tahunajar'];} ?>" class="form-control" placeholder="Tahun Ajar" required>
                     </div>
                   </div>
                   <div class="modal-footer">
@@ -436,7 +502,7 @@ if ($_SESSION['page-to'] == "kelas") {
   }
 }
 if ($_SESSION['page-to'] == "mapel") {
-  if (isset($_GET['key']) && $_GET['key'] != "") {
+  if (isset($_GET['key'])) {
     $key = addslashes(trim($_GET['key']));
     $query = "SELECT * FROM mapel 
       WHERE nama_mapel LIKE '%$key%' 
@@ -517,7 +583,7 @@ if ($_SESSION['page-to'] == "mapel") {
   }
 }
 if ($_SESSION['page-to'] == "nilai-siswa") {
-  if (isset($_GET['key']) && $_GET['key'] != "") {
+  if (isset($_GET['key'])) {
     $key = addslashes(trim($_GET['key']));
     if ($_SESSION['akses'] == 1) {
       $query = "SELECT * FROM nilai 
@@ -550,18 +616,22 @@ if ($_SESSION['page-to'] == "nilai-siswa") {
       <th scope="row" colspan="11">Belum ada data</th>
     </tr>
     <?php } else if (mysqli_num_rows($nilai) > 0) {
-    while ($row = mysqli_fetch_assoc($nilai)) { ?>
+    while ($row = mysqli_fetch_assoc($nilai)) {
+      $tgl_nilai=date_create($row['tgl_nilai']);
+      $tgl_nilai=date_format($tgl_nilai, "d M Y"); ?>
       <tr>
         <th scope="row"><?= $no; ?></th>
         <td><?= $row['nama_siswa'] ?></td>
         <td><?= $row['nama_kelas'] ?></td>
         <td><?= $row['nama_mapel'] ?></td>
+        <td><?= $tgl_nilai ?></td>
         <td><?= $row['nilai_tugas'] ?></td>
         <td><?= $row['nilai_ulangan'] ?></td>
         <td><?= $row['nilai_uts'] ?></td>
         <td><?= $row['nilai_uas'] ?></td>
         <td><?= $row['nilai_akhir'] ?></td>
         <td><?= $row['ket_nilai'] ?></td>
+        <?php if($_SESSION['akses']==2){?>
         <td>
           <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#ubah-nilai<?= $row['id_nilai'] ?>">Ubah</button>
           <div class="modal fade" id="ubah-nilai<?= $row['id_nilai'] ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -576,54 +646,20 @@ if ($_SESSION['page-to'] == "nilai-siswa") {
                 <form action="" method="POST">
                   <div class="modal-body">
                     <div class="form-group">
-                      <label for="siswa">Siswa</label>
-                      <select name="id-siswa" id="siswa" class="form-control" required>
-                        <option value="">Pilih Siswa</option>
-                        <?php foreach ($selectSiswa as $rowSS) : ?>
-                          <option value="<?= $rowSS['id_siswa'] ?>"><?= $rowSS['nama_siswa'] ?></option>
-                        <?php endforeach; ?>
-                      </select>
-                    </div>
-                    <div class="form-group">
-                      <label for="mapel">Mata Pelajaran</label>
-                      <select name="id-mapel" id="mapel" class="form-control" required>
-                        <option value="">Pilih Mata Pelajaran</option>
-                        <?php foreach ($selectMapel as $rowSM) : ?>
-                          <option value="<?= $rowSM['id_mapel'] ?>"><?= $rowSM['nama_mapel'] ?></option>
-                        <?php endforeach; ?>
-                      </select>
-                    </div>
-                    <div class="form-group">
                       <label for="tugas">Nilai Tugas</label>
-                      <input type="number" name="tugas" id="tugas" value="<?php if (isset($_POST['tugas'])) {
-                                                                            echo $_POST['tugas'];
-                                                                          } else {
-                                                                            echo $row['nilai_tugas'];
-                                                                          } ?>" class="form-control" placeholder="Nilai Tugas" required>
+                      <input type="number" name="tugas" id="tugas" value="<?php if (isset($_POST['tugas'])) {echo $_POST['tugas'];} else {echo $row['nilai_tugas'];} ?>" class="form-control" placeholder="Nilai Tugas" required>
                     </div>
                     <div class="form-group">
                       <label for="ulangan">Nilai Ulangan</label>
-                      <input type="number" name="ulangan" id="ulangan" value="<?php if (isset($_POST['ulangan'])) {
-                                                                                echo $_POST['ulangan'];
-                                                                              } else {
-                                                                                echo $row['nilai_ulangan'];
-                                                                              } ?>" class="form-control" placeholder="Nilai Ulangan" required>
+                      <input type="number" name="ulangan" id="ulangan" value="<?php if (isset($_POST['ulangan'])) {echo $_POST['ulangan'];} else {echo $row['nilai_ulangan'];} ?>" class="form-control" placeholder="Nilai Ulangan" required>
                     </div>
                     <div class="form-group">
                       <label for="uts">Nilai UTS</label>
-                      <input type="number" name="uts" id="uts" value="<?php if (isset($_POST['uts'])) {
-                                                                        echo $_POST['uts'];
-                                                                      } else {
-                                                                        echo $row['nilai_uts'];
-                                                                      } ?>" class="form-control" placeholder="Nilai UTS" required>
+                      <input type="number" name="uts" id="uts" value="<?php if (isset($_POST['uts'])) {echo $_POST['uts'];} else {echo $row['nilai_uts'];} ?>" class="form-control" placeholder="Nilai UTS" required>
                     </div>
                     <div class="form-group">
                       <label for="uas">Nilai UAS</label>
-                      <input type="number" name="uas" id="uas" value="<?php if (isset($_POST['uas'])) {
-                                                                        echo $_POST['uas'];
-                                                                      } else {
-                                                                        echo $row['nilai_uas'];
-                                                                      } ?>" class="form-control" placeholder="Nilai UAS" required>
+                      <input type="number" name="uas" id="uas" value="<?php if (isset($_POST['uas'])) {echo $_POST['uas'];} else {echo $row['nilai_uas'];} ?>" class="form-control" placeholder="Nilai UAS" required>
                     </div>
                   </div>
                   <div class="modal-footer">
@@ -661,13 +697,14 @@ if ($_SESSION['page-to'] == "nilai-siswa") {
             </div>
           </div>
         </td>
+        <?php }?>
       </tr>
     <?php $no++;
     }
   }
 }
 if ($_SESSION['page-to'] == "jadwal") {
-  if (isset($_GET['key']) && $_GET['key'] != "") {
+  if (isset($_GET['key'])) {
     $key = addslashes(trim($_GET['key']));
     if ($_SESSION['akses'] == 1) {
       $query = "SELECT * FROM jadwal 
@@ -705,11 +742,7 @@ if ($_SESSION['page-to'] == "jadwal") {
   $no = 1;
   if (mysqli_num_rows($jadwal) == 0) { ?>
     <tr>
-      <th scope="row" colspan="<?php if ($_SESSION['akses'] == 1) {
-                                  echo "7";
-                                } else {
-                                  echo "5";
-                                } ?>">Belum ada data</th>
+      <th scope="row" colspan="<?php if ($_SESSION['akses'] == 1) {echo "7";} else {echo "5";} ?>">Belum ada data</th>
     </tr>
     <?php } else if (mysqli_num_rows($jadwal) > 0) {
     while ($row = mysqli_fetch_assoc($jadwal)) { ?>
@@ -736,8 +769,14 @@ if ($_SESSION['page-to'] == "jadwal") {
                       <div class="form-group">
                         <label for="kelas">Kelas</label>
                         <select name="id-kelas" id="kelas" class="form-control" required>
-                          <option value="">Pilih Kelas</option>
-                          <?php foreach ($selectKelas as $rowSK) : ?>
+                          <?php 
+                            $id_kelas=$row['id_kelas'];
+                            $select_kelas=mysqli_query($conn, "SELECT * FROM kelas WHERE id_kelas!='$id_kelas'");
+                            $select_kelasView=mysqli_query($conn, "SELECT * FROM kelas WHERE id_kelas='$id_kelas'");
+                            $row_kelasView=mysqli_fetch_assoc($select_kelasView);
+                          ?>
+                          <option value="<?= $row_kelasView['id_kelas']?>"><?= $row_kelasView['nama_kelas']?></option>
+                          <?php foreach ($select_kelas as $rowSK) : ?>
                             <option value="<?= $rowSK['id_kelas'] ?>"><?= $rowSK['nama_kelas'] ?></option>
                           <?php endforeach; ?>
                         </select>
@@ -745,33 +784,39 @@ if ($_SESSION['page-to'] == "jadwal") {
                       <div class="form-group">
                         <label for="mapel">Mata Pelajaran</label>
                         <select name="id-mapel" id="mapel" class="form-control" required>
-                          <option value="">Pilih Mata Pelajaran</option>
-                          <?php foreach ($selectMapel as $rowSM) : ?>
+                          <?php 
+                            $id_mapel=$row['id_mapel'];
+                            $select_mapel=mysqli_query($conn, "SELECT * FROM mapel WHERE id_mapel!='$id_mapel'");
+                            $select_mapelView=mysqli_query($conn, "SELECT * FROM mapel WHERE id_mapel='$id_mapel'");
+                            $row_mapelView=mysqli_fetch_assoc($select_mapelView);
+                          ?>
+                          <option value="<?= $row_mapelView['id_mapel']?>"><?= $row_mapelView['nama_mapel']?></option>
+                          <?php foreach ($select_mapel as $rowSM) : ?>
                             <option value="<?= $rowSM['id_mapel'] ?>"><?= $rowSM['nama_mapel'] ?></option>
                           <?php endforeach; ?>
                         </select>
                       </div>
                       <div class="form-group">
                         <label for="jam_mulai">Jam Mulai</label>
-                        <input type="time" name="jam_mulai" id="jam_mulai" value="<?php if (isset($_POST['jam_mulai'])) {
-                                                                                    echo $_POST['jam_mulai'];
-                                                                                  } ?>" class="form-control" placeholder="Jam Mulai" required>
+                        <input type="time" name="jam_mulai" id="jam_mulai" value="<?php if (isset($_POST['jam_mulai'])) {echo $_POST['jam_mulai'];}else{echo $row['jam_mulai'];} ?>" class="form-control" placeholder="Jam Mulai" required>
                       </div>
                       <div class="form-group">
                         <label for="jam_akhir">Jam Akhir</label>
-                        <input type="time" name="jam_akhir" id="jam_akhir" value="<?php if (isset($_POST['jam_akhir'])) {
-                                                                                    echo $_POST['jam_akhir'];
-                                                                                  } ?>" class="form-control" placeholder="Jam Akhir" required>
+                        <input type="time" name="jam_akhir" id="jam_akhir" value="<?php if (isset($_POST['jam_akhir'])) {echo $_POST['jam_akhir'];}else{echo $row['jam_akhir'];} ?>" class="form-control" placeholder="Jam Akhir" required>
                       </div>
                       <div class="form-group">
                         <label for="hari">Hari</label>
                         <select name="hari" id="hari" class="form-control" required>
-                          <option value="Senin">Senin</option>
-                          <option value="Selasa">Selasa</option>
-                          <option value="Rabu">Rabu</option>
-                          <option value="Kamis">Kamis</option>
-                          <option value="Jumat">Jumat</option>
-                          <option value="Sabtu">Sabtu</option>
+                          <?php
+                            $hari=$row['hari'];
+                            $select_hari=mysqli_query($conn, "SELECT * FROM hari WHERE nama_hari!='$hari'");
+                            $select_hariView=mysqli_query($conn, "SELECT * FROM hari WHERE nama_hari='$hari'");
+                            $row_hariView=mysqli_fetch_assoc($select_hariView);
+                          ?>
+                          <option value="<?= $row_hariView['nama_hari']?>"><?= $row_hariView['nama_hari']?></option>
+                          <?php foreach($select_hari as $rowSH):?>
+                          <option value="<?= $rowSH['nama_hari']?>"><?= $rowSH['nama_hari']?></option>
+                          <?php endforeach;?>
                         </select>
                       </div>
                     </div>

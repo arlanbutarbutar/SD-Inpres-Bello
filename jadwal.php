@@ -84,11 +84,7 @@ $_SESSION['page-to'] = "jadwal";
                     <?php $no = 1;
                     if (mysqli_num_rows($jadwal) == 0) { ?>
                       <tr>
-                        <th scope="row" colspan="<?php if ($_SESSION['akses'] == 1) {
-                                                    echo "7";
-                                                  } else {
-                                                    echo "5";
-                                                  } ?>">Belum ada data</th>
+                        <th scope="row" colspan="<?php if ($_SESSION['akses'] == 1) {echo "7";} else {echo "5";} ?>">Belum ada data</th>
                       </tr>
                       <?php } else if (mysqli_num_rows($jadwal) > 0) {
                       while ($row = mysqli_fetch_assoc($jadwal)) { ?>
@@ -115,8 +111,14 @@ $_SESSION['page-to'] = "jadwal";
                                         <div class="form-group">
                                           <label for="kelas">Kelas</label>
                                           <select name="id-kelas" id="kelas" class="form-control" required>
-                                            <option value="">Pilih Kelas</option>
-                                            <?php foreach ($selectKelas as $rowSK) : ?>
+                                            <?php 
+                                              $id_kelas=$row['id_kelas'];
+                                              $select_kelas=mysqli_query($conn, "SELECT * FROM kelas WHERE id_kelas!='$id_kelas'");
+                                              $select_kelasView=mysqli_query($conn, "SELECT * FROM kelas WHERE id_kelas='$id_kelas'");
+                                              $row_kelasView=mysqli_fetch_assoc($select_kelasView);
+                                            ?>
+                                            <option value="<?= $row_kelasView['id_kelas']?>"><?= $row_kelasView['nama_kelas']?></option>
+                                            <?php foreach ($select_kelas as $rowSK) : ?>
                                               <option value="<?= $rowSK['id_kelas'] ?>"><?= $rowSK['nama_kelas'] ?></option>
                                             <?php endforeach; ?>
                                           </select>
@@ -124,33 +126,39 @@ $_SESSION['page-to'] = "jadwal";
                                         <div class="form-group">
                                           <label for="mapel">Mata Pelajaran</label>
                                           <select name="id-mapel" id="mapel" class="form-control" required>
-                                            <option value="">Pilih Mata Pelajaran</option>
-                                            <?php foreach ($selectMapel as $rowSM) : ?>
+                                            <?php 
+                                              $id_mapel=$row['id_mapel'];
+                                              $select_mapel=mysqli_query($conn, "SELECT * FROM mapel WHERE id_mapel!='$id_mapel'");
+                                              $select_mapelView=mysqli_query($conn, "SELECT * FROM mapel WHERE id_mapel='$id_mapel'");
+                                              $row_mapelView=mysqli_fetch_assoc($select_mapelView);
+                                            ?>
+                                            <option value="<?= $row_mapelView['id_mapel']?>"><?= $row_mapelView['nama_mapel']?></option>
+                                            <?php foreach ($select_mapel as $rowSM) : ?>
                                               <option value="<?= $rowSM['id_mapel'] ?>"><?= $rowSM['nama_mapel'] ?></option>
                                             <?php endforeach; ?>
                                           </select>
                                         </div>
                                         <div class="form-group">
                                           <label for="jam_mulai">Jam Mulai</label>
-                                          <input type="time" name="jam_mulai" id="jam_mulai" value="<?php if (isset($_POST['jam_mulai'])) {
-                                                                                                      echo $_POST['jam_mulai'];
-                                                                                                    } ?>" class="form-control" placeholder="Jam Mulai" required>
+                                          <input type="time" name="jam_mulai" id="jam_mulai" value="<?php if (isset($_POST['jam_mulai'])) {echo $_POST['jam_mulai'];}else{echo $row['jam_mulai'];} ?>" class="form-control" placeholder="Jam Mulai" required>
                                         </div>
                                         <div class="form-group">
                                           <label for="jam_akhir">Jam Akhir</label>
-                                          <input type="time" name="jam_akhir" id="jam_akhir" value="<?php if (isset($_POST['jam_akhir'])) {
-                                                                                                      echo $_POST['jam_akhir'];
-                                                                                                    } ?>" class="form-control" placeholder="Jam Akhir" required>
+                                          <input type="time" name="jam_akhir" id="jam_akhir" value="<?php if (isset($_POST['jam_akhir'])) {echo $_POST['jam_akhir'];}else{echo $row['jam_akhir'];} ?>" class="form-control" placeholder="Jam Akhir" required>
                                         </div>
                                         <div class="form-group">
                                           <label for="hari">Hari</label>
                                           <select name="hari" id="hari" class="form-control" required>
-                                            <option value="Senin">Senin</option>
-                                            <option value="Selasa">Selasa</option>
-                                            <option value="Rabu">Rabu</option>
-                                            <option value="Kamis">Kamis</option>
-                                            <option value="Jumat">Jumat</option>
-                                            <option value="Sabtu">Sabtu</option>
+                                            <?php
+                                              $hari=$row['hari'];
+                                              $select_hari=mysqli_query($conn, "SELECT * FROM hari WHERE nama_hari!='$hari'");
+                                              $select_hariView=mysqli_query($conn, "SELECT * FROM hari WHERE nama_hari='$hari'");
+                                              $row_hariView=mysqli_fetch_assoc($select_hariView);
+                                            ?>
+                                            <option value="<?= $row_hariView['nama_hari']?>"><?= $row_hariView['nama_hari']?></option>
+                                            <?php foreach($select_hari as $rowSH):?>
+                                            <option value="<?= $rowSH['nama_hari']?>"><?= $rowSH['nama_hari']?></option>
+                                            <?php endforeach;?>
                                           </select>
                                         </div>
                                       </div>

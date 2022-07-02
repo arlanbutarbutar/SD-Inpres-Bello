@@ -58,30 +58,6 @@ $_SESSION['page-to'] = "tambah-nilai";
                     <?php endforeach; ?>
                   </select>
                 </div>
-                <div class="form-group">
-                  <label for="tugas">Nilai Tugas</label>
-                  <input type="number" name="tugas" id="tugas" value="<?php if (isset($_POST['tugas'])) {
-                                                                        echo $_POST['tugas'];
-                                                                      } ?>" class="form-control" placeholder="Nilai Tugas" required>
-                </div>
-                <div class="form-group">
-                  <label for="ulangan">Nilai Ulangan</label>
-                  <input type="number" name="ulangan" id="ulangan" value="<?php if (isset($_POST['ulangan'])) {
-                                                                            echo $_POST['ulangan'];
-                                                                          } ?>" class="form-control" placeholder="Nilai Ulangan" required>
-                </div>
-                <div class="form-group">
-                  <label for="uts">Nilai UTS</label>
-                  <input type="number" name="uts" id="uts" value="<?php if (isset($_POST['uts'])) {
-                                                                    echo $_POST['uts'];
-                                                                  } ?>" class="form-control" placeholder="Nilai UTS" required>
-                </div>
-                <div class="form-group">
-                  <label for="uas">Nilai UAS</label>
-                  <input type="number" name="uas" id="uas" value="<?php if (isset($_POST['uas'])) {
-                                                                    echo $_POST['uas'];
-                                                                  } ?>" class="form-control" placeholder="Nilai UAS" required>
-                </div>
               </div>
               <div class="modal-footer justify-content-center">
                 <a href="nilai-siswa" class="btn btn-secondary">Kembali</a>

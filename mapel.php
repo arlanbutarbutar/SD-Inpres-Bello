@@ -99,11 +99,7 @@ $_SESSION['page-to'] = "mapel";
                                     <div class="modal-body">
                                       <div class="form-group">
                                         <label for="mapel">Mata pelajaran</label>
-                                        <input type="text" name="mapel" id="mapel" value="<?php if (isset($_POST['mapel'])) {
-                                                                                            echo $_POST['mapel'];
-                                                                                          } else {
-                                                                                            echo $row['nama_mapel'];
-                                                                                          } ?>" class="form-control" placeholder="Mata pelajaran" required>
+                                        <input type="text" name="mapel" id="mapel" value="<?php if (isset($_POST['mapel'])) {echo $_POST['mapel'];} else {echo $row['nama_mapel'];} ?>" class="form-control" placeholder="Mata pelajaran" required>
                                       </div>
                                     </div>
                                     <div class="modal-footer">

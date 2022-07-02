@@ -5,7 +5,7 @@ require_once __DIR__ . '/vendor/autoload.php';
 $mpdf = new \Mpdf\Mpdf();
 $mpdf->WriteHTML('<img src="assets/img/cop.png" style="width: 100%;" alt="">');
 $mpdf->WriteHTML('<h3 style="text-align: center;">Daftar Siswa Kelas '.$nama_kelas.'</h3>');
-$mpdf->WriteHTML('<div style="margin-top: 30px;"><table class="table table-striped" style="width: 100%;">
+$mpdf->WriteHTML('<div style="margin-top: 30px;"><table class="table table-striped" style="width: 100%;text-align: center;">
   <thead>
     <tr>
       <th scope="col">No</th>

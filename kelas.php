@@ -104,36 +104,30 @@ $_SESSION['page-to'] = "kelas";
                                     <div class="modal-body">
                                       <div class="form-group">
                                         <label for="nama-kelas">Kelas</label>
-                                        <input type="text" name="nama-kelas" id="nama-kelas" value="<?php if (isset($_POST['nama-kelas'])) {
-                                                                                                      echo $_POST['nama-kelas'];
-                                                                                                    } else {
-                                                                                                      echo $row['nama_kelas'];
-                                                                                                    } ?>" class="form-control" placeholder="Kelas" required>
+                                        <input type="text" name="nama-kelas" id="nama-kelas" value="<?php if (isset($_POST['nama-kelas'])) {echo $_POST['nama-kelas'];} else {echo $row['nama_kelas'];} ?>" class="form-control" placeholder="Kelas" required>
                                       </div>
                                       <div class="form-group">
                                         <label for="guru">Guru</label>
                                         <select name="id-guru" id="guru" class="form-control" required>
-                                          <option value="">Pilih Guru</option>
-                                          <?php foreach ($selectGuru as $rowSG) : ?>
+                                          <?php 
+                                            $id_guru=$row['id_guru'];
+                                            $select_guru=mysqli_query($conn, "SELECT * FROM guru WHERE id_guru!='$id_guru' AND id_guru>1");
+                                            $select_guruView=mysqli_query($conn, "SELECT * FROM guru WHERE id_guru='$id_guru' AND id_guru>1");
+                                            $row_guruView=mysqli_fetch_assoc($select_guruView);
+                                          ?>
+                                          <option value="<?= $row_guruView['id_guru']?>"><?= $row_guruView['nama_guru']?></option>
+                                          <?php foreach ($select_guru as $rowSG) : ?>
                                             <option value="<?= $rowSG['id_guru'] ?>"><?= $rowSG['nama_guru'] ?></option>
                                           <?php endforeach; ?>
                                         </select>
                                       </div>
                                       <div class="form-group">
                                         <label for="semester">Semester</label>
-                                        <input type="text" name="semester" id="semester" value="<?php if (isset($_POST['semester'])) {
-                                                                                                  echo $_POST['semester'];
-                                                                                                } else {
-                                                                                                  echo $row['semester'];
-                                                                                                } ?>" class="form-control" placeholder="Semester" required>
+                                        <input type="text" name="semester" id="semester" value="<?php if (isset($_POST['semester'])) {echo $_POST['semester'];} else {echo $row['semester'];} ?>" class="form-control" placeholder="Semester" required>
                                       </div>
                                       <div class="form-group">
                                         <label for="tahun-ajar">Tahun Ajar</label>
-                                        <input type="date" name="tahun-ajar" id="tahun-ajar" value="<?php if (isset($_POST['tahun-ajar'])) {
-                                                                                                      echo $_POST['tahun-ajar'];
-                                                                                                    } else {
-                                                                                                      echo $row['tahunajar'];
-                                                                                                    } ?>" class="form-control" placeholder="Tahun Ajar" required>
+                                        <input type="text" name="tahun-ajar" id="tahun-ajar" value="<?php if (isset($_POST['tahun-ajar'])) {echo $_POST['tahun-ajar'];} else {echo $row['tahunajar'];} ?>" class="form-control" placeholder="Tahun Ajar" required>
                                       </div>
                                     </div>
                                     <div class="modal-footer">

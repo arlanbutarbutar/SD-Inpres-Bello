@@ -69,7 +69,7 @@
           header("Location: ".$_SESSION['page-to']); exit();
         }
       }
-      $siswa=mysqli_query($conn, "SELECT * FROM siswa JOIN kelas ON kelas.id_kelas=siswa.id_kelas ORDER BY siswa.id_siswa DESC");
+      $siswa=mysqli_query($conn, "SELECT * FROM siswa JOIN kelas ON kelas.id_kelas=siswa.id_kelas WHERE siswa.status_siswa='1' ORDER BY siswa.id_siswa DESC");
       if(isset($_POST['tambah-siswa'])){
         if(tambahSiswa($_POST)>0){
           $_SESSION['message-success']="Data siswa berhasil ditambahkan.";
@@ -106,6 +106,7 @@
       $nilai=mysqli_query($conn, "SELECT * FROM nilai JOIN siswa ON nilai.id_siswa=siswa.id_siswa JOIN kelas ON siswa.id_kelas=kelas.id_kelas JOIN mapel ON nilai.id_mapel=mapel.id_mapel");
       $selectSiswa=mysqli_query($conn, "SELECT * FROM siswa JOIN kelas ON kelas.id_kelas=siswa.id_kelas ORDER BY siswa.nama_siswa ASC");
       $jadwal=mysqli_query($conn, "SELECT * FROM jadwal JOIN kelas ON jadwal.id_kelas=kelas.id_kelas JOIN mapel ON jadwal.id_mapel=mapel.id_mapel ORDER BY jadwal.id_jadwal DESC");
+      $siswa_lulus=mysqli_query($conn, "SELECT * FROM siswa JOIN kelas ON kelas.id_kelas=siswa.id_kelas WHERE siswa.status_siswa='2' ORDER BY siswa.id_siswa DESC");
     }
     if($_SESSION['akses']<=2){
       $selectGuru=mysqli_query($conn, "SELECT * FROM guru");
@@ -254,7 +255,8 @@
       $cetak_jadwal=mysqli_query($conn, "SELECT * FROM jadwal JOIN kelas ON jadwal.id_kelas=kelas.id_kelas JOIN mapel ON jadwal.id_mapel=mapel.id_mapel JOIN siswa ON kelas.id_kelas=siswa.id_kelas JOIN guru ON kelas.id_guru=guru.id_guru");
       if($_SESSION['akses']==2){
         $id_guru=htmlspecialchars(addslashes(trim(mysqli_real_escape_string($conn, $_SESSION['id-guru']))));
-        $siswa=mysqli_query($conn, "SELECT * FROM siswa JOIN kelas ON kelas.id_kelas=siswa.id_kelas WHERE kelas.id_guru='$id_guru'");
+        $siswa=mysqli_query($conn, "SELECT * FROM siswa JOIN kelas ON kelas.id_kelas=siswa.id_kelas WHERE kelas.id_guru='$id_guru' AND siswa.status_siswa='1' ORDER BY siswa.id_siswa DESC");
+        $siswa_lulus=mysqli_query($conn, "SELECT * FROM siswa JOIN kelas ON kelas.id_kelas=siswa.id_kelas WHERE kelas.id_guru='$id_guru' AND siswa.status_siswa='2' ORDER BY siswa.id_siswa DESC");
         $nilai=mysqli_query($conn, "SELECT * FROM nilai JOIN siswa ON nilai.id_siswa=siswa.id_siswa JOIN kelas ON siswa.id_kelas=kelas.id_kelas JOIN mapel ON nilai.id_mapel=mapel.id_mapel WHERE kelas.id_guru='$id_guru'");
         $selectSiswa=mysqli_query($conn, "SELECT * FROM siswa JOIN kelas ON kelas.id_kelas=siswa.id_kelas WHERE kelas.id_guru='$id_guru'");
         $jadwal=mysqli_query($conn, "SELECT * FROM jadwal JOIN kelas ON jadwal.id_kelas=kelas.id_kelas JOIN mapel ON jadwal.id_mapel=mapel.id_mapel WHERE kelas.id_guru='$id_guru'");
@@ -316,6 +318,28 @@
           JOIN mapel ON absensi.id_mapel=mapel.id_mapel
           JOIN kelas ON absensi.id_kelas=kelas.id_kelas 
         ");
+        if(isset($_POST['naik-kelas'])){
+          if(naik_kelas($_POST)>0){
+            $_SESSION['message-success']="Data kenaikan kelas ".$_POST['nama-siswa']." berhasil diubah.";
+            $_SESSION['time-message']=time();
+            header("Location: ".$_SESSION['page-to']); exit();
+          }else{
+            $_SESSION['message-warning']="Maaf, sepertinya ada kesalahan saat menyambungkan ke database.";
+            $_SESSION['time-message']=time();
+            header("Location: ".$_SESSION['page-to']); exit();
+          }
+        }
+        if(isset($_POST['lulus'])){
+          if(lulus($_POST)>0){
+            $_SESSION['message-success']="Data kenaikan kelas ".$_POST['nama-siswa']." berhasil diubah.";
+            $_SESSION['time-message']=time();
+            header("Location: ".$_SESSION['page-to']); exit();
+          }else{
+            $_SESSION['message-warning']="Maaf, sepertinya ada kesalahan saat menyambungkan ke database.";
+            $_SESSION['time-message']=time();
+            header("Location: ".$_SESSION['page-to']); exit();
+          }
+        }
       }
     }
     if($_SESSION['akses']<=3){ 

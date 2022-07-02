@@ -47,11 +47,13 @@ $_SESSION['page-to'] = "nilai-siswa";
                     </div>
                   </form>
                 </div>
+                <?php if($_SESSION['akses']==2){?>
                 <div class="col-auto">
                   <a class="btn app-btn-primary" href="tambah-nilai"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 16 16">
                       <path fill-rule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2Z" />
                     </svg>Tambah Nilai</a>
                 </div>
+                <?php }?>
               </div>
               <!--//row-->
             </div>
@@ -72,13 +74,16 @@ $_SESSION['page-to'] = "nilai-siswa";
                       <th scope="col">Siswa</th>
                       <th scope="col">Kelas</th>
                       <th scope="col">Mata Pelajaran</th>
+                      <th scope="col">Tgl Nilai</th>
                       <th scope="col">Nilai Tugas</th>
                       <th scope="col">Nilai Ulangan</th>
                       <th scope="col">Nilai UTS</th>
                       <th scope="col">Nilai UAS</th>
                       <th scope="col">Nilai Akhir</th>
                       <th scope="col">Ket</th>
+                      <?php if($_SESSION['akses']==2){?>
                       <th scope="col" colspan="2">Aksi</th>
+                      <?php }?>
                     </tr>
                   </thead>
                   <tbody id="search-page">
@@ -88,18 +93,22 @@ $_SESSION['page-to'] = "nilai-siswa";
                         <th scope="row" colspan="11">Belum ada data</th>
                       </tr>
                       <?php } else if (mysqli_num_rows($nilai) > 0) {
-                      while ($row = mysqli_fetch_assoc($nilai)) { ?>
+                      while ($row = mysqli_fetch_assoc($nilai)) { 
+                        $tgl_nilai=date_create($row['tgl_nilai']);
+                        $tgl_nilai=date_format($tgl_nilai, "d M Y");?>
                         <tr>
                           <th scope="row"><?= $no; ?></th>
                           <td><?= $row['nama_siswa'] ?></td>
                           <td><?= $row['nama_kelas'] ?></td>
                           <td><?= $row['nama_mapel'] ?></td>
+                          <td><?= $tgl_nilai ?></td>
                           <td><?= $row['nilai_tugas'] ?></td>
                           <td><?= $row['nilai_ulangan'] ?></td>
                           <td><?= $row['nilai_uts'] ?></td>
                           <td><?= $row['nilai_uas'] ?></td>
                           <td><?= $row['nilai_akhir'] ?></td>
                           <td><?= $row['ket_nilai'] ?></td>
+                          <?php if($_SESSION['akses']==2){?>
                           <td>
                             <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#ubah-nilai<?= $row['id_nilai'] ?>">Ubah</button>
                             <div class="modal fade" id="ubah-nilai<?= $row['id_nilai'] ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -114,54 +123,20 @@ $_SESSION['page-to'] = "nilai-siswa";
                                   <form action="" method="POST">
                                     <div class="modal-body">
                                       <div class="form-group">
-                                        <label for="siswa">Siswa</label>
-                                        <select name="id-siswa" id="siswa" class="form-control" required>
-                                          <option value="">Pilih Siswa</option>
-                                          <?php foreach ($selectSiswa as $rowSS) : ?>
-                                            <option value="<?= $rowSS['id_siswa'] ?>"><?= $rowSS['nama_siswa'] ?></option>
-                                          <?php endforeach; ?>
-                                        </select>
-                                      </div>
-                                      <div class="form-group">
-                                        <label for="mapel">Mata Pelajaran</label>
-                                        <select name="id-mapel" id="mapel" class="form-control" required>
-                                          <option value="">Pilih Mata Pelajaran</option>
-                                          <?php foreach ($selectMapel as $rowSM) : ?>
-                                            <option value="<?= $rowSM['id_mapel'] ?>"><?= $rowSM['nama_mapel'] ?></option>
-                                          <?php endforeach; ?>
-                                        </select>
-                                      </div>
-                                      <div class="form-group">
                                         <label for="tugas">Nilai Tugas</label>
-                                        <input type="number" name="tugas" id="tugas" value="<?php if (isset($_POST['tugas'])) {
-                                                                                              echo $_POST['tugas'];
-                                                                                            } else {
-                                                                                              echo $row['nilai_tugas'];
-                                                                                            } ?>" class="form-control" placeholder="Nilai Tugas" required>
+                                        <input type="number" name="tugas" id="tugas" value="<?php if (isset($_POST['tugas'])) {echo $_POST['tugas'];} else {echo $row['nilai_tugas'];} ?>" class="form-control" placeholder="Nilai Tugas" required>
                                       </div>
                                       <div class="form-group">
                                         <label for="ulangan">Nilai Ulangan</label>
-                                        <input type="number" name="ulangan" id="ulangan" value="<?php if (isset($_POST['ulangan'])) {
-                                                                                                  echo $_POST['ulangan'];
-                                                                                                } else {
-                                                                                                  echo $row['nilai_ulangan'];
-                                                                                                } ?>" class="form-control" placeholder="Nilai Ulangan" required>
+                                        <input type="number" name="ulangan" id="ulangan" value="<?php if (isset($_POST['ulangan'])) {echo $_POST['ulangan'];} else {echo $row['nilai_ulangan'];} ?>" class="form-control" placeholder="Nilai Ulangan" required>
                                       </div>
                                       <div class="form-group">
                                         <label for="uts">Nilai UTS</label>
-                                        <input type="number" name="uts" id="uts" value="<?php if (isset($_POST['uts'])) {
-                                                                                          echo $_POST['uts'];
-                                                                                        } else {
-                                                                                          echo $row['nilai_uts'];
-                                                                                        } ?>" class="form-control" placeholder="Nilai UTS" required>
+                                        <input type="number" name="uts" id="uts" value="<?php if (isset($_POST['uts'])) {echo $_POST['uts'];} else {echo $row['nilai_uts'];} ?>" class="form-control" placeholder="Nilai UTS" required>
                                       </div>
                                       <div class="form-group">
                                         <label for="uas">Nilai UAS</label>
-                                        <input type="number" name="uas" id="uas" value="<?php if (isset($_POST['uas'])) {
-                                                                                          echo $_POST['uas'];
-                                                                                        } else {
-                                                                                          echo $row['nilai_uas'];
-                                                                                        } ?>" class="form-control" placeholder="Nilai UAS" required>
+                                        <input type="number" name="uas" id="uas" value="<?php if (isset($_POST['uas'])) {echo $_POST['uas'];} else {echo $row['nilai_uas'];} ?>" class="form-control" placeholder="Nilai UAS" required>
                                       </div>
                                     </div>
                                     <div class="modal-footer">
@@ -199,6 +174,7 @@ $_SESSION['page-to'] = "nilai-siswa";
                               </div>
                             </div>
                           </td>
+                          <?php }?>
                         </tr>
                     <?php $no++;
                       }

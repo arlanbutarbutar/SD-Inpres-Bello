@@ -5,13 +5,14 @@ require_once __DIR__ . '/vendor/autoload.php';
 $mpdf = new \Mpdf\Mpdf();
 $mpdf->WriteHTML('<img src="assets/img/cop.png" style="width: 100%;" alt="">');
 $mpdf->WriteHTML('<h3 style="text-align: center;">Daftar Nilai Siswa</h3>');
-$mpdf->WriteHTML('<div style="margin-top: 30px;"><table class="table table-striped" style="width: 100%;">
+$mpdf->WriteHTML('<div style="margin-top: 30px;"><table class="table table-striped" style="width: 100%;text-align: center;">
   <thead>
     <tr>
       <th scope="col">No</th>
       <th scope="col">Siswa</th>
       <th scope="col">Kelas</th>
       <th scope="col">Mata Pelajaran</th>
+      <th scope="col">Tgl Nilai</th>
       <th scope="col">Nilai Tugas</th>
       <th scope="col">Nilai Ulangan</th>
       <th scope="col">Nilai UTS</th>
@@ -30,11 +31,14 @@ if (mysqli_num_rows($nilai) == 0) {
 ');
 } else if (mysqli_num_rows($nilai) > 0) {
   while ($row = mysqli_fetch_assoc($nilai)) {
+    $tgl_nilai=date_create($row['tgl_nilai']);
+    $tgl_nilai=date_format($tgl_nilai, "d M Y");
     $mpdf->WriteHTML('<tr>
     <th scope="row">'. $no .'</th>
     <td>' .$row["nama_siswa"] .'</td>
     <td>'. $row["nama_kelas"] .'</td>
     <td>'. $row["nama_mapel"] .'</td>
+    <td>'. $tgl_nilai .'</td>
     <td>'. $row["nilai_tugas"] .'</td>
     <td>'. $row["nilai_ulangan"] .'</td>
     <td>'. $row["nilai_uts"] .'</td>
