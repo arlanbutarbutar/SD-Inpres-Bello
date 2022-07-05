@@ -107,6 +107,11 @@
       $selectSiswa=mysqli_query($conn, "SELECT * FROM siswa JOIN kelas ON kelas.id_kelas=siswa.id_kelas ORDER BY siswa.nama_siswa ASC");
       $jadwal=mysqli_query($conn, "SELECT * FROM jadwal JOIN kelas ON jadwal.id_kelas=kelas.id_kelas JOIN mapel ON jadwal.id_mapel=mapel.id_mapel ORDER BY jadwal.id_jadwal DESC");
       $siswa_lulus=mysqli_query($conn, "SELECT * FROM siswa JOIN kelas ON kelas.id_kelas=siswa.id_kelas WHERE siswa.status_siswa='2' ORDER BY siswa.id_siswa DESC");
+      $nilai_siswa=mysqli_query($conn, "SELECT * FROM kelas JOIN guru ON kelas.id_guru=guru.id_guru");
+      if(isset($_GET['id-kelas'])){
+        $id_kelas=htmlspecialchars(addslashes(trim(mysqli_real_escape_string($conn, $_GET['id-kelas']))));
+        $nilai=mysqli_query($conn, "SELECT * FROM nilai JOIN siswa ON nilai.id_siswa=siswa.id_siswa JOIN kelas ON siswa.id_kelas=kelas.id_kelas JOIN guru ON kelas.id_guru=guru.id_guru JOIN mapel ON nilai.id_mapel=mapel.id_mapel WHERE kelas.id_kelas='$id_kelas'");
+      }
     }
     if($_SESSION['akses']<=2){
       $selectGuru=mysqli_query($conn, "SELECT * FROM guru");
@@ -257,7 +262,6 @@
         $id_guru=htmlspecialchars(addslashes(trim(mysqli_real_escape_string($conn, $_SESSION['id-guru']))));
         $siswa=mysqli_query($conn, "SELECT * FROM siswa JOIN kelas ON kelas.id_kelas=siswa.id_kelas WHERE kelas.id_guru='$id_guru' AND siswa.status_siswa='1' ORDER BY siswa.id_siswa DESC");
         $siswa_lulus=mysqli_query($conn, "SELECT * FROM siswa JOIN kelas ON kelas.id_kelas=siswa.id_kelas WHERE kelas.id_guru='$id_guru' AND siswa.status_siswa='2' ORDER BY siswa.id_siswa DESC");
-        $nilai=mysqli_query($conn, "SELECT * FROM nilai JOIN siswa ON nilai.id_siswa=siswa.id_siswa JOIN kelas ON siswa.id_kelas=kelas.id_kelas JOIN mapel ON nilai.id_mapel=mapel.id_mapel WHERE kelas.id_guru='$id_guru'");
         $selectSiswa=mysqli_query($conn, "SELECT * FROM siswa JOIN kelas ON kelas.id_kelas=siswa.id_kelas WHERE kelas.id_guru='$id_guru'");
         $jadwal=mysqli_query($conn, "SELECT * FROM jadwal JOIN kelas ON jadwal.id_kelas=kelas.id_kelas JOIN mapel ON jadwal.id_mapel=mapel.id_mapel WHERE kelas.id_guru='$id_guru'");
         $mapel_absen=mysqli_query($conn, "SELECT * FROM jadwal JOIN mapel ON jadwal.id_mapel=mapel.id_mapel JOIN kelas ON jadwal.id_kelas=kelas.id_kelas WHERE kelas.id_guru='$id_guru'");
@@ -340,10 +344,18 @@
             header("Location: ".$_SESSION['page-to']); exit();
           }
         }
+        $nilai_siswa=mysqli_query($conn, "SELECT * FROM kelas JOIN guru ON kelas.id_guru=guru.id_guru WHERE kelas.id_guru='$id_guru'");
+        if(isset($_GET['id-kelas'])){
+          $id_kelas=htmlspecialchars(addslashes(trim(mysqli_real_escape_string($conn, $_GET['id-kelas']))));
+          $nilai=mysqli_query($conn, "SELECT * FROM nilai JOIN siswa ON nilai.id_siswa=siswa.id_siswa JOIN kelas ON siswa.id_kelas=kelas.id_kelas JOIN guru ON kelas.id_guru=guru.id_guru JOIN mapel ON nilai.id_mapel=mapel.id_mapel WHERE kelas.id_guru='$id_guru' AND kelas.id_kelas='$id_kelas'");
+        }else{
+          $nilai=mysqli_query($conn, "SELECT * FROM nilai JOIN siswa ON nilai.id_siswa=siswa.id_siswa JOIN kelas ON siswa.id_kelas=kelas.id_kelas JOIN guru ON kelas.id_guru=guru.id_guru JOIN mapel ON nilai.id_mapel=mapel.id_mapel WHERE kelas.id_guru='$id_guru'");
+        }
+        $view_mapel=mysqli_query($conn, "SELECT * FROM mapel JOIN jadwal ON mapel.id_mapel=jadwal.id_mapel JOIN kelas ON jadwal.id_kelas=kelas.id_kelas WHERE kelas.id_guru='$id_guru'");
       }
     }
     if($_SESSION['akses']<=3){ 
-      // code ...
+      // 
       if($_SESSION['akses']==3){
         $nis=htmlspecialchars(addslashes(trim(mysqli_real_escape_string($conn, $_SESSION['nip']))));
         $id_kelas=htmlspecialchars(addslashes(trim(mysqli_real_escape_string($conn, $_SESSION['id-kelas']))));

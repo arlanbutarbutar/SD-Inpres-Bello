@@ -97,8 +97,8 @@ $_SESSION['page-to'] = "siswa";
                           <td><?= $row['nik'] ?></td>
                           <td><?= $row['nisn'] ?></td>
                           <td><?= $row['nama_siswa'] ?></td>
-                          <td><?= $row['nama_kelas'] ?> <?php if($_SESSION['akses']==2){?><span style="cursor: pointer;" class="badge badge-success shadow" data-toggle="modal" data-target="#exampleModal">Ubah</span><?php }?></td>
-                          <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                          <td><?= $row['nama_kelas'] ?> <?php if($_SESSION['akses']==2){?><span style="cursor: pointer;" class="badge badge-success shadow" data-toggle="modal" data-target="#status-siswa<?= $row['id_siswa']?>">Ubah</span><?php }?></td>
+                          <div class="modal fade" id="status-siswa<?= $row['id_siswa']?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                             <div class="modal-dialog">
                               <div class="modal-content">
                                 <div class="modal-header border-bottom-0">

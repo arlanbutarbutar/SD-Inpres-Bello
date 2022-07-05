@@ -82,6 +82,10 @@ $_SESSION['page-to'] = "nilai-siswa-pdf";
                 } ?>
               </tbody>
             </table>
+            <?php if($_SESSION['akses']==2){?>
+            <p style="text-align: right; margin-top: 150px;">Kupang, <?= date("d M Y")?></p>
+            <p style="text-align: right; margin-top: 50px;"><?= $_SESSION['nama-guru']?></p>
+            <?php }?>
           </div>
         </div>
       </div>

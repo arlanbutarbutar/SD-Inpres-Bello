@@ -436,11 +436,11 @@
       $ket="A";
     }else if($nilai_akhir>=75 && $nilai_akhir<90){
       $ket="B";
-    }else if($nilai_akhir>=50 && $nilai_akhir<75){
+    }else if($nilai_akhir>50 && $nilai_akhir<75){
       $ket="C";
-    }else if($nilai_akhir>=25 && $nilai_akhir<50){
+    }else if($nilai_akhir>25 && $nilai_akhir<=50){
       $ket="D";
-    }else if($nilai_akhir>=0 && $nilai_akhir<25){
+    }else if($nilai_akhir>=0 && $nilai_akhir<=25){
       $ket="E";
     }
     mysqli_query($conn, "INSERT INTO nilai(id_siswa,id_mapel,nilai_tugas,nilai_ulangan,nilai_uts,nilai_uas,nilai_akhir,ket_nilai) VALUES('$id_siswa','$id_mapel','$nilai_tugas','$nilai_ulangan','$nilai_uts','$nilai_uas','$nilai_akhir','$ket')");

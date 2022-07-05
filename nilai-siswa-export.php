@@ -50,8 +50,27 @@ if (mysqli_num_rows($nilai) == 0) {
     $no++;
   }
 }
-$mpdf->WriteHTML('
-</tbody>
-</table></div>
-');
-$mpdf->Output();
+if($_SESSION['akses']==1){
+  $mpdf->WriteHTML('
+  </tbody>
+  </table>
+  ');
+  $mpdf->Output();
+}
+if($_SESSION['akses']==2){
+  $mpdf->WriteHTML('
+  <tr><td colspan="9"></td></tr>
+  <tr><td colspan="9"></td></tr>
+  <tr><td colspan="9"></td></tr>
+  <tr><td colspan="9"></td></tr>
+  <tr><td colspan="9"></td></tr>
+  <tr><td colspan="9"></td></tr>
+  <tr><td colspan="9"></td></tr>
+  <tr><td colspan="9"></td></tr>
+  </tbody>
+  </table>
+  <p style="text-align: right;">Kupang, '.date("d M Y").'</p>
+  <p style="text-align: right; margin-top: 75px;">'.$_SESSION['nama-guru'].'</p>
+  ');
+  $mpdf->Output();
+}
