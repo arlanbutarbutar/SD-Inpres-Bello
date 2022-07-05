@@ -71,9 +71,16 @@ $_SESSION['page-to'] = "siswa-kelas-pdf";
                     </tr>
                 <?php $no++;
                   }
-                } ?>
+                } 
+                $take_kepsek=mysqli_query($conn, "SELECT * FROM guru WHERE jabatan='Kepala Sekolah'");
+                $row_kepsek=mysqli_fetch_assoc($take_kepsek);?>
               </tbody>
             </table>
+            <div style="width: 220px;margin-left: 700px;text-align: center;margin-top: 170px;">
+              <p>Kupang, <?= date("d M Y")?></p>
+              <p>Kepala Sekolah SD Inpres Bello</p>
+              <p style="margin-top: 75px;"><?= $row_kepsek['nama_guru']?></p>
+            </div>
           </div>
         </div>
       </div>

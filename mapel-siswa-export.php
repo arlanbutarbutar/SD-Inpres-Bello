@@ -24,13 +24,13 @@ $mpdf->WriteHTML('<div style="margin-top: 30px;"><table class="table table-strip
   <tbody>
 ');
 $no = 1;
-if (mysqli_num_rows($nilai) == 0) {
+if (mysqli_num_rows($nilai_mapel) == 0) {
   $mpdf->WriteHTML('<tr>
 <th colspan="11">Belum ada data.</th>
 </tr>
 ');
-} else if (mysqli_num_rows($nilai) > 0) {
-  while ($row = mysqli_fetch_assoc($nilai)) {
+} else if (mysqli_num_rows($nilai_mapel) > 0) {
+  while ($row = mysqli_fetch_assoc($nilai_mapel)) {
     $tgl_nilai=date_create($row['tgl_nilai']);
     $tgl_nilai=date_format($tgl_nilai, "d M Y");
     $mpdf->WriteHTML('<tr>
@@ -54,7 +54,6 @@ if($_SESSION['akses']==1){
   $mpdf->WriteHTML('
   </tbody>
   </table>
-  </div>
   ');
   $mpdf->Output();
 }

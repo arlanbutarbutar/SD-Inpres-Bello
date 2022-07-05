@@ -25,7 +25,7 @@ $mpdf->WriteHTML('<table class="table table-striped" style="text-align: center;w
 $no = 1;
 if (mysqli_num_rows($nilai) == 0) {
   $mpdf->WriteHTML('<tr>
-<th colspan="9">Belum ada data.</th>
+<th colspan="11">Belum ada data.</th>
 </tr>
 ');
 } else if (mysqli_num_rows($nilai) > 0) {
@@ -48,8 +48,24 @@ if (mysqli_num_rows($nilai) == 0) {
     $no++;
   }
 }
+$take_kepsek=mysqli_query($conn, "SELECT * FROM guru WHERE jabatan='Kepala Sekolah'");
+$row_kepsek=mysqli_fetch_assoc($take_kepsek);
 $mpdf->WriteHTML('
+<tr><td colspan="11"></td></tr>
+<tr><td colspan="11"></td></tr>
+<tr><td colspan="11"></td></tr>
+<tr><td colspan="11"></td></tr>
+<tr><td colspan="11"></td></tr>
+<tr><td colspan="11"></td></tr>
+<tr><td colspan="11"></td></tr>
+<tr><td colspan="11"></td></tr>
 </tbody>
 </table>
+<div style="width: 220px;margin-left: 450px;text-align: center;">
+  <p>Kupang, '.date("d M Y").'</p>
+  <p>Kepala Sekolah SD Inpres Bello</p>
+  <p style="margin-top: 75px;">'.$row_kepsek['nama_guru'].'</p>
+</div>
+</div>
 ');
 $mpdf->Output();

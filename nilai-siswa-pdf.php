@@ -58,7 +58,7 @@ $_SESSION['page-to'] = "nilai-siswa-pdf";
                 <?php $no = 1;
                 if (mysqli_num_rows($nilai) == 0) { ?>
                   <tr>
-                    <th scope="row" colspan="9">Belum ada data</th>
+                    <th scope="row" colspan="11">Belum ada data</th>
                   </tr>
                   <?php } else if (mysqli_num_rows($nilai) > 0) {
                   while ($row = mysqli_fetch_assoc($nilai)) { 
@@ -82,9 +82,14 @@ $_SESSION['page-to'] = "nilai-siswa-pdf";
                 } ?>
               </tbody>
             </table>
-            <?php if($_SESSION['akses']==2){?>
-            <p style="text-align: right; margin-top: 150px;">Kupang, <?= date("d M Y")?></p>
-            <p style="text-align: right; margin-top: 50px;"><?= $_SESSION['nama-guru']?></p>
+            <?php if($_SESSION['akses']==2){
+                $take_kepsek=mysqli_query($conn, "SELECT * FROM guru WHERE jabatan='Kepala Sekolah'");
+                $row_kepsek=mysqli_fetch_assoc($take_kepsek);?>
+            <div style="width: 220px;margin-left: 400px;text-align: center;margin-top: 100px;">
+              <p>Kupang, <?= date("d M Y")?></p>
+              <p>Kepala Sekolah SD Inpres Bello</p>
+              <p style="margin-top: 75px;"><?= $row_kepsek['nama_guru']?></p>
+            </div>
             <?php }?>
           </div>
         </div>

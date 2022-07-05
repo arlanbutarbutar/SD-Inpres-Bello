@@ -44,7 +44,6 @@ $_SESSION['page-to'] = "jadwal-pdf";
                   <th scope="col">No</th>
                   <th scope="col">Kelas</th>
                   <th scope="col">Guru</th>
-                  <th scope="col">Siswa</th>
                   <th scope="col">Mata Pelajaran</th>
                   <th scope="col">Jam mulai - Jam Akhir</th>
                   <th scope="col">Hari</th>
@@ -54,7 +53,7 @@ $_SESSION['page-to'] = "jadwal-pdf";
                 <?php $no = 1;
                 if (mysqli_num_rows($cetak_jadwal) == 0) { ?>
                   <tr>
-                    <th scope="row" colspan="9">Belum ada data</th>
+                    <th scope="row" colspan="7">Belum ada data</th>
                   </tr>
                   <?php } else if (mysqli_num_rows($cetak_jadwal) > 0) {
                   while ($row = mysqli_fetch_assoc($cetak_jadwal)) { ?>
@@ -62,16 +61,22 @@ $_SESSION['page-to'] = "jadwal-pdf";
                       <th scope="row"><?= $no; ?></th>
                       <td><?= $row['nama_kelas'] ?></td>
                       <td><?= $row['nama_guru'] ?></td>
-                      <td><?= $row['nama_siswa'] ?></td>
                       <td><?= $row['nama_mapel'] ?></td>
                       <td><?= $row['jam_mulai'] . " - " . $row['jam_akhir'] ?></td>
                       <td><?= $row['hari'] ?></td>
                     </tr>
                 <?php $no++;
                   }
-                } ?>
+                }
+                $take_kepsek=mysqli_query($conn, "SELECT * FROM guru WHERE jabatan='Kepala Sekolah'");
+                $row_kepsek=mysqli_fetch_assoc($take_kepsek);?>
               </tbody>
             </table>
+            <div style="width: 220px;margin-left: 400px;text-align: center;margin-top: 100px;">
+              <p>Kupang, <?= date("d M Y")?></p>
+              <p>Kepala Sekolah SD Inpres Bello</p>
+              <p style="margin-top: 75px;"><?= $row_kepsek['nama_guru']?></p>
+            </div>
           </div>
         </div>
       </div>

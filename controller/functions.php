@@ -427,6 +427,17 @@
   function tambahnilai($data){global $conn;
     $id_siswa=htmlspecialchars(addslashes(trim(mysqli_real_escape_string($conn, $data['id-siswa']))));
     $id_mapel=htmlspecialchars(addslashes(trim(mysqli_real_escape_string($conn, $data['id-mapel']))));
+    $checkNilai=mysqli_query($conn, "SELECT * FROM nilai WHERE id_siswa='$id_siswa' AND id_mapel='$id_mapel'");
+    if(mysqli_num_rows($checkNilai)>0){
+      $_SESSION['message-danger']="Maaf, data siswa yang kamu tambahkan untuk nilai sudah ada.";
+      $_SESSION['time-message']=time();
+      return false;
+    }
+    mysqli_query($conn, "INSERT INTO nilai(id_siswa,id_mapel) VALUES('$id_siswa','$id_mapel')");
+    return mysqli_affected_rows($conn);
+  }
+  function ubahnilai($data){global $conn;
+    $id_nilai=htmlspecialchars(addslashes(trim(mysqli_real_escape_string($conn, $data['id-nilai']))));
     $nilai_tugas=htmlspecialchars(addslashes(trim(mysqli_real_escape_string($conn, $data['tugas']))));
     $nilai_ulangan=htmlspecialchars(addslashes(trim(mysqli_real_escape_string($conn, $data['ulangan']))));
     $nilai_uts=htmlspecialchars(addslashes(trim(mysqli_real_escape_string($conn, $data['uts']))));
@@ -441,27 +452,6 @@
     }else if($nilai_akhir>25 && $nilai_akhir<=50){
       $ket="D";
     }else if($nilai_akhir>=0 && $nilai_akhir<=25){
-      $ket="E";
-    }
-    mysqli_query($conn, "INSERT INTO nilai(id_siswa,id_mapel,nilai_tugas,nilai_ulangan,nilai_uts,nilai_uas,nilai_akhir,ket_nilai) VALUES('$id_siswa','$id_mapel','$nilai_tugas','$nilai_ulangan','$nilai_uts','$nilai_uas','$nilai_akhir','$ket')");
-    return mysqli_affected_rows($conn);
-  }
-  function ubahnilai($data){global $conn;
-    $id_nilai=htmlspecialchars(addslashes(trim(mysqli_real_escape_string($conn, $data['id-nilai']))));
-    $nilai_tugas=htmlspecialchars(addslashes(trim(mysqli_real_escape_string($conn, $data['tugas']))));
-    $nilai_ulangan=htmlspecialchars(addslashes(trim(mysqli_real_escape_string($conn, $data['ulangan']))));
-    $nilai_uts=htmlspecialchars(addslashes(trim(mysqli_real_escape_string($conn, $data['uts']))));
-    $nilai_uas=htmlspecialchars(addslashes(trim(mysqli_real_escape_string($conn, $data['uas']))));
-    $nilai_akhir=($nilai_tugas+$nilai_ulangan+$nilai_uts+$nilai_uas)/4;
-    if($nilai_akhir>=90){
-      $ket="A";
-    }else if($nilai_akhir>=75 && $nilai_akhir<90){
-      $ket="B";
-    }else if($nilai_akhir>=50 && $nilai_akhir<75){
-      $ket="C";
-    }else if($nilai_akhir>=25 && $nilai_akhir<50){
-      $ket="D";
-    }else if($nilai_akhir>=0 && $nilai_akhir<25){
       $ket="E";
     }
     mysqli_query($conn, "UPDATE nilai SET nilai_tugas='$nilai_tugas', nilai_ulangan='$nilai_ulangan', nilai_uts='$nilai_uts', nilai_uas='$nilai_uas', nilai_akhir='$nilai_akhir', ket_nilai='$ket' WHERE id_nilai='$id_nilai'");

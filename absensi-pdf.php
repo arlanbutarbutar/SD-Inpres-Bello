@@ -53,7 +53,7 @@ $_SESSION['page-to'] = "absensi-pdf";
                 <?php $no = 1;
                 if (mysqli_num_rows($absensi_cetak) == 0) { ?>
                   <tr>
-                    <th scope="row" colspan="9">Belum ada data</th>
+                    <th scope="row" colspan="6">Belum ada data</th>
                   </tr>
                   <?php } else if (mysqli_num_rows($absensi_cetak) > 0) {
                   while ($row = mysqli_fetch_assoc($absensi_cetak)) { ?>
@@ -68,9 +68,16 @@ $_SESSION['page-to'] = "absensi-pdf";
                     </tr>
                 <?php $no++;
                   }
-                } ?>
+                } 
+                $take_kepsek=mysqli_query($conn, "SELECT * FROM guru WHERE jabatan='Kepala Sekolah'");
+                $row_kepsek=mysqli_fetch_assoc($take_kepsek);?>
               </tbody>
             </table>
+            <div style="width: 220px;margin-left: 400px;text-align: center;margin-top: 100px;">
+              <p>Kupang, <?= date("d M Y")?></p>
+              <p>Kepala Sekolah SD Inpres Bello</p>
+              <p style="margin-top: 75px;"><?= $row_kepsek['nama_guru']?></p>
+            </div>
           </div>
         </div>
       </div>
