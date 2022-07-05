@@ -1,14 +1,13 @@
 -- phpMyAdmin SQL Dump
--- version 4.9.7
+-- version 5.1.1
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost:3306
--- Waktu pembuatan: 28 Jun 2022 pada 02.53
--- Versi server: 10.3.35-MariaDB
--- Versi PHP: 7.4.29
+-- Host: 127.0.0.1
+-- Waktu pembuatan: 05 Jul 2022 pada 22.50
+-- Versi server: 10.4.22-MariaDB
+-- Versi PHP: 7.4.27
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
 
@@ -19,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `gaslvldx_sd_inpres_bello`
+-- Database: `sd_inpres_bello`
 --
 
 -- --------------------------------------------------------
@@ -37,14 +36,6 @@ CREATE TABLE `absensi` (
   `status_hadir` char(25) NOT NULL,
   `id_kelas` int(15) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data untuk tabel `absensi`
---
-
-INSERT INTO `absensi` (`id_absen`, `id_guru`, `id_siswa`, `id_mapel`, `tanggal`, `status_hadir`, `id_kelas`) VALUES
-(49, 11, 11, 8, '2022-06-26', 'Hadir', 5),
-(50, 11, 11, 8, '2022-06-27', 'Tidak Hadir', 5);
 
 -- --------------------------------------------------------
 
@@ -95,7 +86,51 @@ INSERT INTO `guru` (`id_guru`, `nip`, `nama_guru`, `jenis_kelamin`, `no_tlp`, `p
 (31, '0', 'Yuliana Tuan', 'Perempuan', '08142365478', '$2y$10$iuIoV0BLAy22d6pzCovx3ulJVFpBo7f6IEABI3bpJ4oyH5KptnqUi', 2, 'Guru Mapel', '5371025605740002', 'Guru Honor', '5848751654300012'),
 (32, '0', 'Erny  Suryanti  Bangngu,s. pd', 'Perempuan', '097567325778', '$2y$10$zp43kMJWaTMP0qhR6X5KRuntpsCxH9aVuLzTa0PcK8R19NPhO1Q8i', 2, 'Guru Mapel', '5371044701780012', 'Guru Honor', '6439756658300022'),
 (33, '0', 'Delf  Bendalina Toh', 'Perempuan', '081234654168', '$2y$10$1Vn8h.9nnTA713ECl2VubOWxdjayX/qgiFDWgXPzsC1LArwjriDd2', 2, 'Guru Mapel', '5371035412850001', 'Guru Honor', '8546763664230193'),
-(34, '0', 'Delmy Paril  Matsor Unu', 'Perempuan', '089129381929', '$2y$10$Ck4IOD9y65lZhIQseUfDGO.POcSOh0a6SL/361etxwDC.HkkcAKpe', 2, 'Guru Mapel', '5371046904830006', 'Guru Honor', '3761761662130152');
+(34, '0', 'Delmy Paril  Matsor Unu', 'Perempuan', '089129381929', '$2y$10$1Ss5nj1KXlBlOhiaLOiOaeWhwzD0hdPl4vRtWMkfdp.E4NGqcgkr6', 2, 'Guru Mapel', '5371046904830006', 'CPNS', '3761761662130152');
+
+-- --------------------------------------------------------
+
+--
+-- Struktur dari tabel `hari`
+--
+
+CREATE TABLE `hari` (
+  `id_hari` int(11) NOT NULL,
+  `nama_hari` varchar(20) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data untuk tabel `hari`
+--
+
+INSERT INTO `hari` (`id_hari`, `nama_hari`) VALUES
+(1, 'Senin'),
+(2, 'Selasa'),
+(3, 'Rabu'),
+(4, 'Kamis'),
+(5, 'Jumat'),
+(6, 'Sabtu');
+
+-- --------------------------------------------------------
+
+--
+-- Struktur dari tabel `jabatan`
+--
+
+CREATE TABLE `jabatan` (
+  `id_jabatan` int(11) NOT NULL,
+  `jabatan` varchar(50) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data untuk tabel `jabatan`
+--
+
+INSERT INTO `jabatan` (`id_jabatan`, `jabatan`) VALUES
+(1, 'Kepala Sekolah'),
+(2, 'Wakil Kepala Sekolah'),
+(3, 'Guru Mapel'),
+(4, 'Penjaga Sekolah');
 
 -- --------------------------------------------------------
 
@@ -130,7 +165,8 @@ INSERT INTO `jadwal` (`id_jadwal`, `id_kelas`, `id_mapel`, `jam_mulai`, `jam_akh
 (38, 17, 12, '08:00:00', '09:00:00', 'Senin'),
 (39, 18, 17, '08:00:00', '10:00:00', 'Senin'),
 (40, 5, 17, '07:00:00', '09:00:00', 'Selasa'),
-(41, 10, 7, '07:30:00', '10:00:00', 'Selasa');
+(41, 10, 7, '07:30:00', '10:00:00', 'Selasa'),
+(42, 5, 10, '07:57:00', '08:57:00', 'Rabu');
 
 -- --------------------------------------------------------
 
@@ -151,10 +187,8 @@ CREATE TABLE `kelas` (
 --
 
 INSERT INTO `kelas` (`id_kelas`, `nama_kelas`, `id_guru`, `semester`, `tahunajar`) VALUES
-(5, '1 A', 11, 1, 2022),
-(6, '1 B', 12, 1, 2022),
-(7, '3 A', 13, 1, 2022),
-(8, '5', 14, 1, 2022),
+(5, '1A', 11, 1, 2022),
+(6, '1B', 12, 1, 2022),
 (9, '2A', 12, 2, 2022),
 (10, '2B', 13, 2, 2022),
 (11, '3A', 14, 2, 2022),
@@ -164,8 +198,7 @@ INSERT INTO `kelas` (`id_kelas`, `nama_kelas`, `id_guru`, `semester`, `tahunajar
 (15, '5A', 17, 2, 2022),
 (16, '5B', 18, 2, 2022),
 (17, '6A', 19, 2, 2022),
-(18, '6B', 20, 2, 2022),
-(19, '6A', 11, 2, 2022);
+(18, '6B', 20, 2, 2022);
 
 -- --------------------------------------------------------
 
@@ -208,16 +241,19 @@ CREATE TABLE `nilai` (
   `nilai_uts` int(11) NOT NULL,
   `nilai_uas` int(11) NOT NULL,
   `nilai_akhir` int(11) NOT NULL,
-  `ket_nilai` varchar(10) NOT NULL
+  `ket_nilai` varchar(10) NOT NULL DEFAULT '-',
+  `tgl_nilai` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data untuk tabel `nilai`
 --
 
-INSERT INTO `nilai` (`id_nilai`, `id_siswa`, `id_mapel`, `nilai_tugas`, `nilai_ulangan`, `nilai_uts`, `nilai_uas`, `nilai_akhir`, `ket_nilai`) VALUES
-(9, 11, 8, 80, 80, 95, 88, 86, 'B'),
-(10, 12, 7, 50, 65, 60, 45, 55, 'C');
+INSERT INTO `nilai` (`id_nilai`, `id_siswa`, `id_mapel`, `nilai_tugas`, `nilai_ulangan`, `nilai_uts`, `nilai_uas`, `nilai_akhir`, `ket_nilai`, `tgl_nilai`) VALUES
+(29, 12, 8, 0, 0, 0, 0, 0, '-', '2022-07-06 02:56:18'),
+(31, 12, 9, 0, 0, 0, 0, 0, '-', '2022-07-06 03:01:30'),
+(32, 13, 8, 0, 0, 0, 0, 0, '-', '2022-07-06 03:01:36'),
+(33, 15, 8, 0, 0, 0, 0, 0, '-', '2022-07-06 03:01:42');
 
 -- --------------------------------------------------------
 
@@ -234,17 +270,77 @@ CREATE TABLE `siswa` (
   `jenis_kelamin` varchar(35) NOT NULL,
   `ttl` varchar(50) NOT NULL,
   `nama_ibu` varchar(100) NOT NULL,
-  `nik` varchar(50) NOT NULL
+  `nik` varchar(50) NOT NULL,
+  `status_siswa` int(11) NOT NULL DEFAULT 1,
+  `tgl_lulus` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data untuk tabel `siswa`
 --
 
-INSERT INTO `siswa` (`id_siswa`, `id_kelas`, `nama_siswa`, `nisn`, `password`, `jenis_kelamin`, `ttl`, `nama_ibu`, `nik`) VALUES
-(11, 5, 'ABRAHAM LATU SEDU', '3159108937', '$2y$10$neuExTBL85HFbzk11Imgle6HHW3QfOFGbzcVE87dsO07M6dFAmIYu', 'Laki-Laki', 'Kupang, 23 Jun 2022', 'VULDENSIA LAMATOK AN', '5371020301150002'),
-(12, 6, 'Agnesia Micharuny Zacharia', '3143294136', '$2y$10$twhTxt662vOgYf2ptT7wieHcdzBALbDuKSZX318KdFMCGCQSuTVq6', 'Perempuan', 'sabu, 23 Jun 2022', 'Sance Taopan', '5301115708140001'),
-(13, 6, 'Rendi', '5122462', '$2y$10$isIxA3lqGRsTlW6kg08LSuSAfT8HO1W1woREn9REpm6ug9BqMwK0a', 'Laki-Laki', 'Bandung, 26 Jun 2022', 'Santi', '235225');
+INSERT INTO `siswa` (`id_siswa`, `id_kelas`, `nama_siswa`, `nisn`, `password`, `jenis_kelamin`, `ttl`, `nama_ibu`, `nik`, `status_siswa`, `tgl_lulus`) VALUES
+(11, 5, 'ABRAHAM LATU SEDU', '3159108937', '$2y$10$neuExTBL85HFbzk11Imgle6HHW3QfOFGbzcVE87dsO07M6dFAmIYu', 'Laki-Laki', 'Kupang, 23 Jun 2022', 'VULDENSIA LAMATOK AN', '5371020301150002', 1, '2022-07-02 12:22:42'),
+(12, 6, 'Agnesia Micharuny Zacharia', '3143294136', '$2y$10$twhTxt662vOgYf2ptT7wieHcdzBALbDuKSZX318KdFMCGCQSuTVq6', 'Perempuan', 'sabu, 23 Jun 2022', 'Sance Taopan', '5301115708140001', 1, '2022-07-02 12:22:42'),
+(13, 6, 'Angevin Tillo  Fransesco Hoinbala', '0147919826', '$2y$10$frJWDhRGQ6gk20k.rbrg8.o7CKMsLFfA3UaGWTIn/Xt6YfcdHuiue', 'Laki-Laki', 'Kupang, 14 Oct 2014', 'Jerni  Takesan', '5371021402140002', 1, '2022-07-02 12:22:42'),
+(14, 5, 'Ariel Arianto Lay', '3152746002', '$2y$10$Uy8m9r7OXvaRZ7b0TyHnyOwHFlRbmqXhu2pZ755pAABTjVNQGRYh6', 'Laki-Laki', 'Rote, 10 Apr 2015', 'Ester Riwo  Buky', '5371021004150003', 1, '2022-07-02 12:22:42'),
+(15, 6, 'Bar Wiliam Kornalius  Tuan', '3157074876', '$2y$10$OrXyPfUupf1DlLGwEfifgOHomrSAwoqhuk5mKkNOiEgC6gUxO0xUa', 'Laki-Laki', 'Sabu, 21 Feb 2015', 'Santi  Nainatun', '5371022101150003', 1, '2022-07-02 12:22:42'),
+(16, 6, 'Benyamin Paulus  Alokafani', '3154857585', '$2y$10$mvZT3jfWtyN4HUiz8Ktdl.Cqd38BuhFzhvlt1nFJqyihnI7TsHtcS', 'Laki-Laki', 'Rote, 23 Jun 2015', 'Yosina  Kause', '5371020306150006', 1, '2022-07-02 12:22:42'),
+(17, 5, 'CHELOMITA PUTRI  OLIVIERA POY', '0144596542', '$2y$10$4L/gdl9v6A/Jt1mlVz5Q/u6mYNjW3InAh.Q34ywQBLCGnxhK66WUy', 'Perempuan', 'Sabu, 10 Apr 2014', 'SANTI  PATTIPELO HY', '5314024410140001', 1, '2022-07-02 12:22:42'),
+(18, 6, 'Daut Ariston Tefa', '3152261703', '$2y$10$ppHI2NEBIqQzFpYy963nEOdlp19mou3a40f.tchX8blDplSPasTZe', 'Laki-Laki', 'Atambua, 11 Aug 2015', 'Santi Sette', '5371021108150003', 1, '2022-07-02 12:22:42'),
+(19, 5, 'DELOGANER AVENS  MALAIBANA', '3146077422', '$2y$10$H7wj2Vhg3YhMmYUBPeyqyu5NJZFM8GofV6WQE.i6ty319RvOitQRu', 'Laki-Laki', 'Kupang, 18 Dec 2014', 'ESTER  PADAMAI', '5371041812140003', 1, '2022-07-02 12:22:42'),
+(20, 5, 'DINA FRANSISKA  SALLU', '3157424262', '$2y$10$J8QF7e9i/xgfuMHYY.6TY.5IcNE3li0qYsixL9h7/QJ37xsfi21l6', 'Perempuan', 'Soe, 14 Jan 2015', 'FERDERIKA FALLO', '5371025401150002', 1, '2022-07-02 12:22:42'),
+(21, 5, 'Elando Alan Wielawa', '3159676673', '$2y$10$WMZE2xRvytO4M3grc0bf/.fqRcV30yCwGx0gyLIKLHNbSA9t/mY56', 'Laki-Laki', 'Sabu, 07 Feb 2014', 'Yandri  Sepriana  Mauboi', '5371020702150003', 1, '2022-07-02 12:22:42'),
+(22, 5, 'FRANSISKO ASANAB', '3158269759', '$2y$10$sCowrf5rxums.jlFU91sIuW/MFc71tDI2h13QcBJ8aCC8pGdzTMeq', 'Laki-Laki', 'Kupang, 02 Mar 2014', 'YULIANA  BAITANU', '5371020203150004', 1, '2022-07-02 12:22:42'),
+(23, 6, 'FRANSISKUS  RICHARDO LAKA  NABUTAEK', '3158289480', '$2y$10$BIGNAatP1UZQsm5E.1G0buZCxVnUQ1EuIokWuTKPLs/QWMzwUVNCO', 'Laki-Laki', 'Sabu, 09 Apr 2015', 'MARIA  IMELDA  ITA', '5301160904150001', 1, '2022-07-02 12:22:42'),
+(24, 5, 'GHERALDIEN KETIE  RIWU KAHO', '3159940760', '$2y$10$.BNovS2KRyvHjvv5GlMEN.U.EvlpZwmnD0S1/F/Bl23x7bEYZvWSS', 'Perempuan', 'Sabu, 21 Jul 2015', 'YULIANA  HENUKH', '5371036107150004', 1, '2022-07-02 12:22:42'),
+(25, 6, 'FIONA MARSANDA  TOTO', '3159632047', '$2y$10$G/ESVEKH37Zf61VkcAraAutc1xsIjLZ12KmYRlkGaKk6Tj7lQSTNS', 'Perempuan', 'Rote, 02 Apr 2015', 'WELHELMI NA TOTO', '5371024204150002', 1, '2022-07-02 12:22:42'),
+(26, 5, 'Anastasya Cendana  Sinamur', '0147234965', '$2y$10$mP74dpuAZHnH7ztywFvliegYmc0oQp3gmI91Mi/3R4.mL5Ai8JZYa', 'Perempuan', 'Surabaya, 30 Aug 2014', 'Natalia Sri  Maryani', '5371027008140003', 1, '2022-07-02 12:22:42'),
+(27, 5, 'ANJANA CITRA  MELIAN TALAN', '0141183199', '$2y$10$Fm55FgbfuE/hVYKkMgJoFOk655YJRoLU.9S3QGKShUMQ4qA/pHIvm', 'Perempuan', 'Rote, 02 May 2015', 'RINCE  MANU', '5302074602140002', 1, '2022-07-02 12:22:42'),
+(28, 9, 'ANTIKA BILIU', '3149570982', '$2y$10$7S.C3iyUHbqOB51YYx9Mru3i9wJChZPah9Wak.4yIWcITY2a/sePG', 'Perempuan', 'Rote, 02 Aug 2014', 'AXAMINA  TUALAKA', '5371024208140004', 1, '2022-07-02 12:22:42'),
+(29, 5, 'CHAROLIN BENZA  MAHODIM', '0137027224', '$2y$10$MhP8PJz6eqbhAViTacZCh.G2gTM/bgVw0oW25DvTm5dika19/6i1y', 'Perempuan', 'Kupang, 13 Apr 2013', 'ADRIANA  BENGANG', '5371057103130001', 1, '2022-07-02 12:22:42'),
+(30, 5, 'CRIS AGUNG TUAN', '3134679797', '$2y$10$Z90YElYWwTvv7YHOtp1cCeKDMSH819YP42ydYeylMkh5V/k4E8Geu', 'Laki-Laki', 'Kupang, 29 Mar 2013', 'DAMARIS  HAELEKE', '5371022903130006', 1, '2022-07-02 12:22:42'),
+(31, 5, 'DEMSI SESFAO', '0136879884', '$2y$10$9egN3aPhVHjfU1h1UYmsHu7IpKpU/jDqiDRtuG7SUgSY2Gm2/uPA6', 'Laki-Laki', 'Kupang, 22 May 2013', 'ERSYLINA  HERVIANA  NENO', '5371022205130002', 1, '2022-07-02 12:22:42'),
+(32, 6, 'CRISSANTOS AGUNG  RAGA SAE', '3137727252', '$2y$10$P0c84n7kDdRc/jK62qEzjOVXBHo5tPath6ZwQHNNDbLCRaCp3q4ya', 'Laki-Laki', 'Kupang, 29 Mar 2013', 'ERNESTA  NDOYA', '5316042903130001', 1, '2022-07-02 12:22:42'),
+(33, 6, 'ABNER DEVANDRI  ADITYA MANDALA', '0115433333', '$2y$10$AD7NKn5ONTN/cI9Qtd8XwOgdaEjZolnDxXRQquvDLmaZzZZ7CtkGO', 'Laki-Laki', 'Kupang, 30 May 2011', 'YULIANA  FAOT', '5371023005110002', 1, '2022-07-02 12:22:42'),
+(34, 6, 'Abraham Joseph More  Ghale', '0117536548', '$2y$10$898ChPU73Ya1leJuLeWq5.UMADl/d4ruDybpZNxrM3CK76QMpv1bW', 'Laki-Laki', 'Atambua, 30 Dec 2011', 'Yasinta  Maria  Seran', '5371043012110001', 1, '2022-07-02 12:22:42'),
+(35, 5, 'Ade Marlino Neno', '0126208122', '$2y$10$WdKc1r9uFaGo7TZ6Nbmbgude4D6kgsa2PFDCmtZlrfsGfzVN89VSe', 'Laki-Laki', 'Atambua, 28 Jun 2012', 'Adriana  Hoinbala', '5371022806120006', 1, '2022-07-02 12:22:42'),
+(36, 5, 'Adrianus benu', '0123646027', '$2y$10$LG7OMDi/GuV9nD62KeiG/Of/eKq7teGgG3qhgHvFTxNAo9K4O/dZS', 'Laki-Laki', 'Kupang, 20 Aug 2012', 'Katarina Ta  ek', '5371022008120003', 1, '2022-07-02 12:22:42'),
+(37, 5, 'AEEKUNU LEMAN  AKUNUT', '0121102363', '$2y$10$CZ9U9Z4uHv4qkUg5RNY3wut7Eqbhet0gMQbS/p4/EAEKE9oik6bkG', 'Laki-Laki', 'Rote, 03 Nov 2012', 'AISA', '3578160311120001', 1, '2022-07-02 12:22:42'),
+(38, 5, 'AGUSTINUS JULIO  TALAN', '3127336522', '$2y$10$mXMqiFuAr/SyaHQWpsShgerEwPtNB10a2H2VJlz/Z.u6pi1k7buiW', 'Laki-Laki', 'Kupang, 16 Jul 2012', 'RINCE  MANU', '5302071607120001', 1, '2022-07-02 12:22:42'),
+(39, 6, 'ALVIAN LIONEL  AMTIRAN', '0122262578', '$2y$10$hGTrmswZMY3pqfzz6Ep96.7zohtMVAxbpRh/DLCqKTBHuW.wyaN.W', 'Laki-Laki', 'Kupang, 02 Aug 2012', 'ELEN  MARLINA  LETELAY', '5371020208120001', 1, '2022-07-02 12:22:42'),
+(40, 5, 'CAROLINA CEYSELA  OBESI BIFEL', '0108170005', '$2y$10$bBacg4fh0BKGp2rcYg..keq76fCMzuJwnGIc4CWyj6NcxEywWvCrW', 'Perempuan', 'Kupang, 09 Dec 2010', 'MARGARET HA MBURU', '5371024912100002', 1, '2022-07-02 12:22:42'),
+(41, 5, 'CICILIA GORETTI MUNI', '0116303502', '$2y$10$fgbmqZr3WsX8lzXFHyKC0e6OZZGR8nVLsQavNE.rUoAZxyugUyrrq', 'Perempuan', 'Kupang, 08 Jan 2018', 'YULIANA  TUAN', '5371024801110002', 1, '2022-07-02 12:22:42'),
+(42, 6, 'DELIS KRISTIANI  TAKESAN', '0111433566', '$2y$10$OW/VWMYTsH.a4r.FKenJ2OO70Tdi3QaxpuGSF22HWoWR0A2EZKvfq', 'Perempuan', 'Kupang, 02 Dec 2011', 'ROSALINA  TUAN', '5371024212110002', 1, '2022-07-02 12:22:42'),
+(43, 6, 'DISON EMANUEL BRIA', '0092155533', '$2y$10$pfOyV8ov7.RqN.6pPMPuqeMH/ksJVdxaNNTjPDeAFxt9Wchmnlho.', 'Laki-Laki', 'Atambua, 26 Oct 2009', 'MARTEDA  BANA', '5371022610090003', 1, '2022-07-02 12:22:42'),
+(44, 6, 'FANNY SAFIRA  TUNMUNI', '0119730430', '$2y$10$xUyeJIU0uWfXkh5S8xMQzeM7bpC3rDHsE5lFzROrw8DBg7wedRGsW', 'Perempuan', 'Kupang, 24 Feb 2011', 'Yuliana  Getreda', '5301116402110001', 1, '2022-07-02 12:22:42'),
+(45, 6, 'ALFONS YESAYA  MANUS', '0093658020', '$2y$10$VXJLkJlMEWZd3fC5tg.vZe2UbuUN4lRvl8hA8FsZ9rzYHMgmFIZUK', 'Laki-Laki', 'Kupang, 27 Apr 2009', 'FUNANCI  ABI  MANUS', '5371022704090003', 1, '2022-07-02 12:22:42'),
+(46, 5, 'ALMA SETTE', '0102720574', '$2y$10$XIZhx2WCcWkn1UsQDnPS3uIGttHuPJSrYs8b4B1UqFyACRKnzfoRq', 'Laki-Laki', 'Kupang, 17 Aug 2010', 'YOIRI  RITALEN  FALLO', '5371025708100003', 1, '2022-07-02 18:54:28'),
+(47, 5, 'ANDHIKA FANGGI', '0097695624', '$2y$10$pxcjO1vC2eZO71IsemAa9ekI7VUlxxowdU5Zql0A0Eu2BqZXbVj7a', 'Laki-Laki', 'Rote, 19 Aug 2009', 'ELIADA  LALUS', '5371021908090003', 1, '2022-07-02 12:22:42'),
+(48, 10, 'ANGGA APRIANTO  MISSA', '0097494086', '$2y$10$EPtzMKqaYDuhEe3L9giFK.tL4FKrRGNAYALb.9OpJYJmnSWsINCnS', 'Laki-Laki', 'Kefa, 11 Feb 2009', 'MENCI  TUALAKA', '5371021104090002', 1, '2022-07-02 12:22:42'),
+(49, 5, 'ARVEN MILLO PUTRA  NDOLU', '0108857074', '$2y$10$kF/J/p9RWvnhd0Vniyw./epPcUM0TUTqeR9nD/8ls3IiKFj/AGnzW', 'Laki-Laki', 'Rote, 09 Feb 2010', 'APLONIA  MAU', '5371020902100004', 1, '2022-07-02 12:22:42'),
+(50, 6, 'Awelpedroz Puru Duli', '0103309760', '$2y$10$fjzh.YF4X9bHcqUN0iJwve0YyYZ2suonn.OnPagoI/Vnl8tzqChwu', 'Laki-Laki', 'Sabu, 25 May 2010', 'Bonevita  Palang  Keda', '5371042505100003', 1, '2022-07-02 12:22:42'),
+(51, 6, 'REANOLDA MESI', '94039203', '$2y$10$j6T/O6aKsWloGiokZVSM0ucTQQYr0xI9fZcA4C5u5JGwbSKJYOBAG', 'Laki-Laki', 'Kupang, 12 Dec 2012', 'mesi', '987654', 1, '2022-07-02 12:22:42');
+
+-- --------------------------------------------------------
+
+--
+-- Struktur dari tabel `status_guru`
+--
+
+CREATE TABLE `status_guru` (
+  `id_status` int(11) NOT NULL,
+  `status` varchar(50) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data untuk tabel `status_guru`
+--
+
+INSERT INTO `status_guru` (`id_status`, `status`) VALUES
+(1, 'Guru Honor'),
+(2, 'CPNS'),
+(3, 'PNS');
 
 --
 -- Indexes for dumped tables
@@ -265,6 +361,18 @@ ALTER TABLE `absensi`
 --
 ALTER TABLE `guru`
   ADD PRIMARY KEY (`id_guru`);
+
+--
+-- Indeks untuk tabel `hari`
+--
+ALTER TABLE `hari`
+  ADD PRIMARY KEY (`id_hari`);
+
+--
+-- Indeks untuk tabel `jabatan`
+--
+ALTER TABLE `jabatan`
+  ADD PRIMARY KEY (`id_jabatan`);
 
 --
 -- Indeks untuk tabel `jadwal`
@@ -303,6 +411,12 @@ ALTER TABLE `siswa`
   ADD KEY `id_kelas` (`id_kelas`);
 
 --
+-- Indeks untuk tabel `status_guru`
+--
+ALTER TABLE `status_guru`
+  ADD PRIMARY KEY (`id_status`);
+
+--
 -- AUTO_INCREMENT untuk tabel yang dibuang
 --
 
@@ -310,7 +424,7 @@ ALTER TABLE `siswa`
 -- AUTO_INCREMENT untuk tabel `absensi`
 --
 ALTER TABLE `absensi`
-  MODIFY `id_absen` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=51;
+  MODIFY `id_absen` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=64;
 
 --
 -- AUTO_INCREMENT untuk tabel `guru`
@@ -319,10 +433,22 @@ ALTER TABLE `guru`
   MODIFY `id_guru` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
 
 --
+-- AUTO_INCREMENT untuk tabel `hari`
+--
+ALTER TABLE `hari`
+  MODIFY `id_hari` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
+-- AUTO_INCREMENT untuk tabel `jabatan`
+--
+ALTER TABLE `jabatan`
+  MODIFY `id_jabatan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
 -- AUTO_INCREMENT untuk tabel `jadwal`
 --
 ALTER TABLE `jadwal`
-  MODIFY `id_jadwal` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
+  MODIFY `id_jadwal` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
 
 --
 -- AUTO_INCREMENT untuk tabel `kelas`
@@ -340,13 +466,19 @@ ALTER TABLE `mapel`
 -- AUTO_INCREMENT untuk tabel `nilai`
 --
 ALTER TABLE `nilai`
-  MODIFY `id_nilai` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id_nilai` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
 
 --
 -- AUTO_INCREMENT untuk tabel `siswa`
 --
 ALTER TABLE `siswa`
-  MODIFY `id_siswa` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id_siswa` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=52;
+
+--
+-- AUTO_INCREMENT untuk tabel `status_guru`
+--
+ALTER TABLE `status_guru`
+  MODIFY `id_status` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- Ketidakleluasaan untuk tabel pelimpahan (Dumped Tables)
