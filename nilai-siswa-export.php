@@ -50,34 +50,24 @@ if (mysqli_num_rows($nilai) == 0) {
     $no++;
   }
 }
-if($_SESSION['akses']==1){
-  $mpdf->WriteHTML('
-  </tbody>
-  </table>
-  </div>
-  ');
-  $mpdf->Output();
-}
 $take_kepsek=mysqli_query($conn, "SELECT * FROM guru WHERE jabatan='Kepala Sekolah'");
 $row_kepsek=mysqli_fetch_assoc($take_kepsek);
-if($_SESSION['akses']==2){
-  $mpdf->WriteHTML('
-  <tr><td colspan="11"></td></tr>
-  <tr><td colspan="11"></td></tr>
-  <tr><td colspan="11"></td></tr>
-  <tr><td colspan="11"></td></tr>
-  <tr><td colspan="11"></td></tr>
-  <tr><td colspan="11"></td></tr>
-  <tr><td colspan="11"></td></tr>
-  <tr><td colspan="11"></td></tr>
-  </tbody>
-  </table>
-  <div style="width: 220px;margin-left: 450px;text-align: center;">
-    <p>Kupang, '.date("d M Y").'</p>
-    <p>Kepala Sekolah SD Inpres Bello</p>
-    <p style="margin-top: 75px;">'.$row_kepsek['nama_guru'].'</p>
-  </div>
-  </div>
-  ');
-  $mpdf->Output();
-}
+$mpdf->WriteHTML('
+<tr><td colspan="11"></td></tr>
+<tr><td colspan="11"></td></tr>
+<tr><td colspan="11"></td></tr>
+<tr><td colspan="11"></td></tr>
+<tr><td colspan="11"></td></tr>
+<tr><td colspan="11"></td></tr>
+<tr><td colspan="11"></td></tr>
+<tr><td colspan="11"></td></tr>
+</tbody>
+</table>
+<div style="width: 220px;margin-left: 450px;text-align: center;">
+  <p>Kupang, '.date("d M Y").'</p>
+  <p>Kepala Sekolah SD Inpres Bello</p>
+  <p style="margin-top: 75px;">'.$row_kepsek['nama_guru'].'</p>
+</div>
+</div>
+');
+$mpdf->Output();

@@ -79,18 +79,16 @@ $_SESSION['page-to'] = "nilai-siswa-pdf";
                     </tr>
                 <?php $no++;
                   }
-                } ?>
-              </tbody>
-            </table>
-            <?php if($_SESSION['akses']==2){
+                } 
                 $take_kepsek=mysqli_query($conn, "SELECT * FROM guru WHERE jabatan='Kepala Sekolah'");
                 $row_kepsek=mysqli_fetch_assoc($take_kepsek);?>
+              </tbody>
+            </table>
             <div style="width: 220px;margin-left: 400px;text-align: center;margin-top: 100px;">
               <p>Kupang, <?= date("d M Y")?></p>
               <p>Kepala Sekolah SD Inpres Bello</p>
               <p style="margin-top: 75px;"><?= $row_kepsek['nama_guru']?></p>
             </div>
-            <?php }?>
           </div>
         </div>
       </div>
