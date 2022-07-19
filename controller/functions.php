@@ -439,9 +439,29 @@
   function ubahnilai($data){global $conn;
     $id_nilai=htmlspecialchars(addslashes(trim(mysqli_real_escape_string($conn, $data['id-nilai']))));
     $nilai_tugas=htmlspecialchars(addslashes(trim(mysqli_real_escape_string($conn, $data['tugas']))));
+    if($nilai_tugas>100){
+      $_SESSION['message-danger']="Maaf, sepertinya anda memasukan nilai yang salah.";
+      $_SESSION['time-message']=time();
+      return false;
+    }
     $nilai_ulangan=htmlspecialchars(addslashes(trim(mysqli_real_escape_string($conn, $data['ulangan']))));
+    if($nilai_ulangan>100){
+      $_SESSION['message-danger']="Maaf, sepertinya anda memasukan nilai yang salah.";
+      $_SESSION['time-message']=time();
+      return false;
+    }
     $nilai_uts=htmlspecialchars(addslashes(trim(mysqli_real_escape_string($conn, $data['uts']))));
+    if($nilai_uts>100){
+      $_SESSION['message-danger']="Maaf, sepertinya anda memasukan nilai yang salah.";
+      $_SESSION['time-message']=time();
+      return false;
+    }
     $nilai_uas=htmlspecialchars(addslashes(trim(mysqli_real_escape_string($conn, $data['uas']))));
+    if($nilai_uas>100){
+      $_SESSION['message-danger']="Maaf, sepertinya anda memasukan nilai yang salah.";
+      $_SESSION['time-message']=time();
+      return false;
+    }
     $nilai_akhir=($nilai_tugas+$nilai_ulangan+$nilai_uts+$nilai_uas)/4;
     if($nilai_akhir>=90){
       $ket="A";
