@@ -45,7 +45,6 @@ $_SESSION['page-to'] = "nilai-siswa-pdf";
                   <th scope="col">Siswa</th>
                   <th scope="col">Kelas</th>
                   <th scope="col">Mata Pelajaran</th>
-                  <th scope="col">Tgl Nilai</th>
                   <th scope="col">Nilai Tugas</th>
                   <th scope="col">Nilai Ulangan</th>
                   <th scope="col">Nilai UTS</th>
@@ -58,7 +57,7 @@ $_SESSION['page-to'] = "nilai-siswa-pdf";
                 <?php $no = 1;
                 if (mysqli_num_rows($nilai) == 0) { ?>
                   <tr>
-                    <th scope="row" colspan="11">Belum ada data</th>
+                    <th scope="row" colspan="10">Belum ada data</th>
                   </tr>
                   <?php } else if (mysqli_num_rows($nilai) > 0) {
                   while ($row = mysqli_fetch_assoc($nilai)) { 
@@ -69,7 +68,6 @@ $_SESSION['page-to'] = "nilai-siswa-pdf";
                       <td><?= $row['nama_siswa'] ?></td>
                       <td><?= $row['nama_kelas'] ?></td>
                       <td><?= $row['nama_mapel'] ?></td>
-                      <td><?= $tgl_nilai ?></td>
                       <td><?= $row['nilai_tugas'] ?></td>
                       <td><?= $row['nilai_ulangan'] ?></td>
                       <td><?= $row['nilai_uts'] ?></td>

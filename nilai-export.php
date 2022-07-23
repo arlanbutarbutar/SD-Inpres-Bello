@@ -9,7 +9,6 @@ $mpdf->WriteHTML('<table class="table table-striped" style="text-align: center;w
   <thead>
     <tr>
     <th scope="col">No</th>
-    <th scope="col">Tgl Nilai</th>
     <th scope="col">Mata Pelajaran</th>
     <th scope="col">Guru</th>
     <th scope="col">Nilai Tugas</th>
@@ -25,7 +24,7 @@ $mpdf->WriteHTML('<table class="table table-striped" style="text-align: center;w
 $no = 1;
 if (mysqli_num_rows($nilai) == 0) {
   $mpdf->WriteHTML('<tr>
-<th colspan="11">Belum ada data.</th>
+<th colspan="10">Belum ada data.</th>
 </tr>
 ');
 } else if (mysqli_num_rows($nilai) > 0) {
@@ -34,7 +33,6 @@ if (mysqli_num_rows($nilai) == 0) {
     $tgl_nilai=date_format($tgl_nilai, "d M Y");
     $mpdf->WriteHTML('<tr>
     <th scope="row">'. $no .'</th>
-    <td>'. $tgl_nilai .'</td>
     <td>'. $row["nama_mapel"] .'</td>
     <td>'. $row["nama_guru"] .'</td>
     <td>'. $row["nilai_tugas"] .'</td>
@@ -51,7 +49,6 @@ if (mysqli_num_rows($nilai) == 0) {
 $take_kepsek=mysqli_query($conn, "SELECT * FROM guru WHERE jabatan='Kepala Sekolah'");
 $row_kepsek=mysqli_fetch_assoc($take_kepsek);
 $mpdf->WriteHTML('
-<tr><td colspan="11"></td></tr>
 <tr><td colspan="11"></td></tr>
 <tr><td colspan="11"></td></tr>
 <tr><td colspan="11"></td></tr>

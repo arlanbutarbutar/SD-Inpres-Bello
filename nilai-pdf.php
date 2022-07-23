@@ -42,7 +42,6 @@ $_SESSION['page-to'] = "nilai-pdf";
               <thead>
                 <tr style="border-top: hidden;">
                   <th scope="col">No</th>
-                  <th scope="col">Tgl Nilai</th>
                   <th scope="col">Mata Pelajaran</th>
                   <th scope="col">Guru</th>
                   <th scope="col">Nilai Tugas</th>
@@ -65,7 +64,6 @@ $_SESSION['page-to'] = "nilai-pdf";
                     $tgl_nilai=date_format($tgl_nilai, "d M Y");?>
                     <tr>
                       <th scope="row"><?= $no; ?></th>
-                      <td><?= $tgl_nilai ?></td>
                       <td><?= $row['nama_mapel'] ?></td>
                       <td><?= $row['nama_guru'] ?></td>
                       <td><?= $row['nilai_tugas'] ?></td>
